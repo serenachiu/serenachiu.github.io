@@ -2,12 +2,32 @@
 <html>
   <head>
     <title>Hello</title>
+    
+    <script>
+      
+      var password = "1234";
+      
+      function passcheck() {
+        var input = document.getElementById('pass1').value;
+        if(input != password) {
+          alert('Wrong Password. Try again.');
+        } else if(input) == password {
+          alert('Correct password. Click ok to enter webpage!');
+        }
+        
+      }
+    </script>
+    
   </head>
+  
+  
   <body>
     <h1>Test password</h1>
-    <form class="passform" action="webpage.html">
+    <form class="passform" action="webpage.html" onsubmit="return passcheck()">
       password: <input type="password" required id="pass1">
       <input type="submit">
     </form>
   </body>
+  
+  
 </html>
