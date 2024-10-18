@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Login</title>
+    <link rel="stylesheet" href="./styles.css">
+    <link rel="manifest" href="./manifest.json">
+    <script src="./script.js"></script>
+</head>
+<body>
+
+    <iframe name="hidden-confirm" 
+        id="hidden-confirm" 
+        style="display: none;"
+        onload="showConfirmPage()">
+    </iframe>
+
+    <form
+        id="myForm" 
+        action="https://docs.google.com/forms/u/0/d/e/1FAIpQLSds8adkpjYnQiV_wucjZR9CYzMH0H2h5lYF7GpySBItGakUcA/formResponse" 
+        method="POST" 
+        target="hidden-confirm"
+    >
+
+        <input 
+            type="text" 
+            name="entry.1317209940" 
+            id="inputField"
+            placeholder="Enter phone number" 
+        >
+    
+        <div class="keypad">
+            <button type="button" onclick="addInput(1)">1</button>
+            <button type="button" onclick="addInput(2)">2</button>
+            <button type="button" onclick="addInput(3)">3</button>
+            <button type="button" onclick="addInput(4)">4</button>
+            <button type="button" onclick="addInput(5)">5</button>
+            <button type="button" onclick="addInput(6)">6</button>
+            <button type="button" onclick="addInput(7)">7</button>
+            <button type="button" onclick="addInput(8)">8</button>
+            <button type="button" onclick="addInput(9)">9</button>
+            <button type="button" onclick="addInput(0)" style="grid-column:2">0</button>
+            <button type="button" onclick="clearInput()" style="color: #ccc" >&#10006</button>
+        </div>
+        
+        <button disabled
+            type="submit" 
+            class="submit-button" 
+            id="submitButton"
+            onclick="submitForm()"
+        >
+            LOGIN
+        </button>
+    </form>
+</body>
+</html>
