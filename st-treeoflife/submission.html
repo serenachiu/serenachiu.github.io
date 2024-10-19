@@ -2,12 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Document</title>
+    <link rel="manifest" href="./manifest.json">
 
     <style>
+
+        * {
+            font-family: 'Trebuchet MS', sans-serif;
+        }
+
         body {
-            font-family: 'Verdana', sans-serif;
             background-color: #f8f4f1;
             height: 100vh;
             width: 100vw;
@@ -16,16 +21,18 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            gap: 15px;
+            gap: 35px;
+            overflow: hidden;
         }
 
-        p {
-            font-size: 25px;
-            letter-spacing: 1px;
+        img {
+            width: 500px;
+            max-width: 72vw;
+            height: auto;
         }
 
         a {
-            padding: 10px 60px;
+            padding: 15px 50px;
             border: none;
             border-radius: 25px;
             text-decoration: none;
@@ -34,9 +41,9 @@
             
             background-color: #f5a623 ;
             color: white;
-            font-size: 15px;
+            font-size: 20px;
             font-weight: bold;
-            letter-spacing: 1.3px;
+            letter-spacing: 2.3px;
         }
 
     </style>
@@ -48,12 +55,25 @@
                 window.location.href = "./index.html";
             }
         });
+
+        
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js')
+                .then((registration) => {
+                console.log('Service Worker registered with scope:', registration.scope);
+                })
+                .catch((error) => {
+                console.error('Service Worker registration failed:', error);
+                });
+            });
+        }
     </script>
 
 
 </head>
 <body>
-    <p>Welcome!</p>
+    <img src="https://media1.tenor.com/m/NYLH1ZzFWbUAAAAC/minions.gif" alt="Welcome!">    
     <a href="./index.html">BACK &#11013</a>
 </body>
 </html>
