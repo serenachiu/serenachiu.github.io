@@ -1,5 +1,9 @@
+* {
+    font-family: 'Trebuchet MS', sans-serif;
+}
+
 body {
-    font-family: 'Verdana', sans-serif;
+    
     background-color: #f8f4f1;
     height: 100vh;
     margin: 0;
@@ -7,6 +11,7 @@ body {
     justify-content: center;
     align-items: center;
     
+    overflow: hidden;
 }
 
 form {
@@ -19,16 +24,20 @@ form {
 #inputField {
     border: none;
     background-color: transparent;
+    color: #d88e14;
     text-align: center;
     letter-spacing: 1.5px;
-    font-size: 17px;
+    font-size: 28px;
     font-weight: bold;
     margin-bottom: 40px;
 }
 
 #inputField:focus {
     outline: none;
-  }
+}
+#inputField::placeholder {
+    font-size: 17px;
+}
 
 
 .keypad {
@@ -39,11 +48,11 @@ form {
 }
 
 .keypad button {
-    width: 60px;
-    height: 60px;
+    width: 70px;
+    height: 70px;
     border: none;
     border-radius: 50%;
-    font-size: 24px;
+    font-size: 30px;
     text-align: center;
     color: #333;
     background-color: #f8f4f1;
@@ -52,15 +61,15 @@ form {
 }
 
 .submit-button {
-    width: 90%;
-    padding: 10px 60px;
+    width: 255px;
+    padding: 15px;
     border: none;
     border-radius: 25px;
     background-color: #f5a623;
     color: white;
-    font-size:  15px;
+    font-size:  20px;
     font-weight: bold;
-    letter-spacing: 1.3px;
+    letter-spacing: 4.3px;
 
     opacity: 1;
     transition: 0.3s ease-out;
