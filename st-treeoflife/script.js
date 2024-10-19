@@ -1,8 +1,11 @@
 var submitted = false;
+var inputField;
+var submitButton;
 
 window.onload = function() {
 
-    const inputField = document.getElementById('inputField');
+    inputField = document.getElementById('inputField');
+    submitButton = document.getElementById('submitButton');
 
     // Store the original placeholder text
     const originalPlaceholder = inputField.placeholder;
@@ -29,26 +32,23 @@ window.onload = function() {
     });
 };
 
-
 function addInput(value) {
-    document.getElementById('inputField').value += value;
+    inputField.value += value;
     checkDigit();
 }
 
 function clearInput() {
-    document.getElementById('inputField').value = '';
+    inputField.value = '';
 }
 
 function checkDigit() {
-    const button = document.getElementById('submitButton');
-    const value = document.getElementById('inputField').value;
     
         // Check if the value is exactly 8 digits long
-        if (/^\d{8}$/.test(value)) {
-            button.disabled = false; // Enable the submit button
+        if (/^\d{8}$/.test(inputField.value)) {
+            submitButton.disabled = false; // Enable the submit button
             return true;
         } else {
-            button.disabled = true; // Disable the submit button
+            submitButton.disabled = true; // Disable the submit button
             return false;
         }
 }
