@@ -8,7 +8,7 @@
   "theme_color": "#f8f4f1",
   "icons": [
     {
-      "src": "icon-bear.png", // "icon-tree-1.png", "icon-tree-2.png"
+      "src": "icon-bear.png",
       "sizes": "512x512",
       "type": "image/png"
     }
