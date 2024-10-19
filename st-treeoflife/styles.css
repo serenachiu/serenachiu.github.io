@@ -1,5 +1,6 @@
 * {
     font-family: 'Trebuchet MS', sans-serif;
+    touch-action: manipulation;
 }
 
 body {
