@@ -37,6 +37,7 @@ function addInput(value) {
 
 function clearInput() {
     inputField.value = '';
+    disableButtons(true);
 }
 
 function checkDigit() {
@@ -46,7 +47,7 @@ function checkDigit() {
             disableButtons(false); // Enable the submit button
             return true;
         } else {
-            disableButtons(true);; // Disable the submit button
+            disableButtons(true); // Disable the submit button
             return false;
         }
 }
