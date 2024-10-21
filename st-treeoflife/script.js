@@ -1,11 +1,17 @@
-var submitted = false;
-var inputField;
-var submitButton;
+// passing parameter
+var submitStatus, submitPhone;
+
+// get DOM element
+var inputField, statusField;
+var loginButton, logoutButton;
 
 window.onload = function() {
 
     inputField = document.getElementById('inputField');
-    submitButton = document.getElementById('submitButton');
+    statusField = document.getElementById('status');
+    loginButton = document.getElementById('loginButton');
+    logoutButton = document.getElementById('logoutButton');
+
 
     // Store the original placeholder text
     const originalPlaceholder = inputField.placeholder;
@@ -22,14 +28,6 @@ window.onload = function() {
 
     inputField.addEventListener('input',  () => checkDigit());
 
-    document.addEventListener('keydown', (event) => {
-        if (event.key === 'Delete') {
-            clearInput();
-        } else if (event.key === 'Enter' && checkDigit() === true) {
-            document.getElementById('myForm').submit();
-            submitForm();
-        }
-    });
 };
 
 function addInput(value) {
@@ -45,21 +43,33 @@ function checkDigit() {
     
         // Check if the value is exactly 8 digits long
         if (/^\d{8}$/.test(inputField.value)) {
-            submitButton.disabled = false; // Enable the submit button
+            disableButtons(false); // Enable the submit button
             return true;
         } else {
-            submitButton.disabled = true; // Disable the submit button
+            disableButtons(true);; // Disable the submit button
             return false;
         }
 }
 
-function submitForm() {
-    submitted = true;
+function disableButtons(boolean) {
+    loginButton.disabled = boolean;
+    logoutButton.disabled = boolean;
+}
+
+function submitForm(status) {
+    const myForm = document.getElementById('myForm');
+    statusField.value = status;
+
+    submitStatus = status;
+    submitPhone = inputField.value;
+
+    myForm.submit();
+
 }
 
 function showConfirmPage() {
-    if(submitted) {
-        window.location.href = "submission.html";
+    if(submitStatus != null && submitPhone != null) {
+        window.location.href = `submission.html?status=${submitStatus}&phone=${submitPhone}`;
     }
 }
 
