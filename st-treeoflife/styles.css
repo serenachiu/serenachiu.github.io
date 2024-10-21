@@ -1,6 +1,5 @@
 * {
     font-family: 'Trebuchet MS', sans-serif;
-    touch-action: none;
 }
 
 body {
@@ -13,6 +12,8 @@ body {
     align-items: center;
     
     overflow: hidden;
+    touch-action: none;
+
 }
 
 form {
