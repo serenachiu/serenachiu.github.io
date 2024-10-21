@@ -12,8 +12,6 @@ body {
     align-items: center;
     
     overflow: hidden;
-    touch-action: none;
-
 }
 
 form {
