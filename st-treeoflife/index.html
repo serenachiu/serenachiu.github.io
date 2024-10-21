@@ -13,7 +13,7 @@
     <iframe name="hidden-confirm" 
         id="hidden-confirm" 
         style="display: none;"
-        onload="showConfirmPage()">
+        onload="showConfirmPage(submitStatus)">
     </iframe>
 
     <form
@@ -28,6 +28,13 @@
             name="entry.1317209940" 
             id="inputField"
             placeholder="Enter phone number" 
+        >
+
+        <input 
+            type="text" 
+            name="entry.370096872" 
+            id="status"
+            style="display: none;"
         >
     
         <div class="keypad">
@@ -45,13 +52,23 @@
         </div>
         
         <button disabled
-            type="submit" 
+            type="button" 
             class="submit-button" 
-            id="submitButton"
-            onclick="submitForm()"
+            id="loginButton"
+            onclick="submitForm('LOGIN')"
         >
-            LOGIN
+            登入
+        </button>
+
+        <button disabled
+            type="button" 
+            class="submit-button" 
+            id="logoutButton"
+            onclick="submitForm('LOGOUT')"
+        >
+            離開本中心時按此登出
         </button>
     </form>
 </body>
 </html>
+
