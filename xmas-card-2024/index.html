@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>2024陪你過聖誕</title>
+
+      <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+    <!-- main -->
+    <link href="./xmas-card.css" rel="stylesheet">
+    <script src="./xmas-card.js"></script>
+
+  </head>
+
+<body>
+
+  <header class="header">
+
+    <a href="#">
+      <div class="content">
+        <span class="material-symbols-rounded icon">park</span>
+        <div class="title">2024陪你過聖誕(第一團)</div>
+      </div>
+    </a>
+    
+    <div class="nav">
+      <a href="#payment">
+        <span class="material-symbols-rounded">info</span>
+      </a>
+      <a href="#cart">
+        <span id="cart-button" class="material-symbols-rounded">shopping_bag</span>
+      </a>
+
+    </div>
+
+  </header>
+
+  <!-- hidden iframe and form section -->
+  <iframe name="hidden-confirm" 
+  id="hidden-confirm"
+  style="display: none;"
+  onload="showConfirmPage()">
+  </iframe>
+
+  <form   
+    id="myForm" 
+    method="post" 
+    action="https://docs.google.com/forms/u/0/d/e/1FAIpQLSc-m0cBkhvef7uQBBnkNxaM2sAK1vmgR5gFEQtPsPOFrB7Ftg/formResponse"
+    target="hidden-confirm">
+
+
+  <main>
+
+    <section id="filter">
+      <button class="filter-button active" data-filter="all">全部</button>
+      <button class="filter-button" data-filter="portrait">直向</button>
+      <button class="filter-button" data-filter="landscape">橫向</button>
+      <button class="filter-button" data-filter="150x100">150x100mm</button>
+      <button class="filter-button" data-filter="164x102">164x102mm</button>
+      <button class="filter-button" data-filter="100x100">100x100mm</button>
+      <button class="filter-button" data-filter="單面">單面</button>
+      <button class="filter-button" data-filter="雙面">雙面</button>
+      <button class="filter-button" data-filter="信封">信封</button>
+      <button class="filter-button" data-filter="bundle">折扣優惠</button>
+    </section>
+
+    <section id="album" class="album">
+      <!-- append designs here -->
+        </div>
+      </div>
+      
+    </section>
+
+    <section id="lightboxes">
+      <!-- append lightboxed here -->
+
+    </section>
+
+    <section id="payment" class="subpage">
+      <div class="header">
+        <p>下單須知</p>
+        <a href="#"><span class="material-symbols-rounded">close</span></a>
+      </div>
+
+      <div class="container">
+        <p>截單時間: 23/11/2024（六）23:59pm<br>
+          預計到貨日期: 12月頭<br><br>
+
+          如有任何疑問 請dm @speak_slothlly<br>
+          所有貨品一經成功下單付款不設退換<br>
+          下單前請先確認尺寸和材質
+        </p>
+
+      </div>
+
+
+    </section>
+
+    <section id="cart" class="html-content subpage">
+      <div class="header shadow-sm">
+        <p>購物車</p>
+        <a href="#"><span class="material-symbols-rounded">close</span></a>
+      </div>
+
+      <div class="container">
+        <div id="cart-list">
+          <!-- append cart list here -->
+        </div>
+
+        <!-- cart summary -->
+        <div id="summary">
+            <p class="subtitle">訂單概要</p>
+            <p class="text"></p>
+
+            <div class="divider"></div>
+
+            <p class="subtitle">填寫您的聯絡資料</p>
+            <div class="contact-details">
+              <input id="input-contact" name="entry.1963391732" placeholder="電話號碼 / IG名稱" required></input>
+              <input id="input-remark" name="entry.905493907" placeholder="備註(可空)"></input>
+              <p class="radio-label">請選擇以下其中一種交收方式</p>
+              <div class="radio-group" id="input-shipping">
+                  <label class="radio-item">
+                      <input type="radio" name="options" value="mispace自取" checked>
+                      <span class="checkmark"></span>
+                      到貨通知後MiSpace自取 (柯士甸道102號1901室)
+                      <br>開放時間: 星期一至五10am-6pm 星期六日3pm-6pm
+                  </label>
+                  <label class="radio-item">
+                      <input type="radio" name="options" value="地鐵">
+                      <span class="checkmark"></span>
+                      屯馬綫(屯門至紅磡站)交收 (會再私底下約您)
+                  </label>
+                  <label class="radio-item">
+                      <input type="radio" name="options" value="平郵">
+                      <span class="checkmark"></span>
+                      平郵郵寄(不包郵，寄前pm您所需郵費)
+                  </label>
+              </div>
+              <div class="inputbox-mail-details hide">
+                <input id="input-name" name="entry." placeholder="收件人名稱"></input>
+                <input id="input-address" name="entry." placeholder="收件地址"></input>
+              </div>
+
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="paycode-container">
+              <p class="subtitle">付款</p>
+              <p>掃描以下QR code 或 <a href="https:payme.hsbc/sally6b25" target="_blank">按此打開PAYME</a></p>
+              <p class="reminder">*付款必須備註 "(你的電話/ig名稱) 2024 Xmas Card"，才能處理你的訂單</p>
+              <img class="paycode" src="./paycode.jpeg" alt="payme code"></a>
+
+            </div>
+
+            <button type="submit" id="submit-button">確認下單</div>
+          
+  
+        </div>
+
+      </div>
+
+
+    </section>
+
+  </main>
+  </form>
+
+</html>

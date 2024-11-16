@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>2024陪你過聖誕</title>
+
+      <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+    <!-- other -->
+    <script type="text/javascript" src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>    
+
+    <!-- main -->
+    <link rel="stylesheet" href="./xmas-card.css">
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const targetDiv = document.querySelector('.download');
+        targetDiv.innerHTML = localStorage.getItem('downloadHTML');
+
+        document.getElementById("submit-contact").innerText = localStorage.getItem('input-contact');
+      });
+
+      function downloadCart() {
+
+        const targetDiv = document.querySelector(".download");
+
+        // Use html2canvas to download the "targetDiv" as an image
+        html2canvas(targetDiv).then(canvas => {
+            const imgData = canvas.toDataURL('image/jpg');
+            const link = document.createElement('a');
+            link.href = imgData;
+            link.download = '2024陪你過聖誕_訂單記錄.jpg';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }).catch(error => {
+            console.error('Error capturing div as image:', error);
+        });
+      }
+    </script>
+
+  </head>
+
+<body>
+
+  <header class="header">
+
+    <div class="content">
+      <div class="title">下單成功! 多謝支持♥♥</div>
+    </div>
+
+  </header>
+
+  <main class="submission" style="margin: 30px">
+
+    <div class="reminder">
+      <span class="material-symbols-rounded icon">warning</span>
+      <p>假如尚未付款，請<a href="https:payme.hsbc/sally6b25" target="_blank">按此連結</a>打開PAYME (付款必須備註 "<span id="submit-contact"></span> 2024 Xmas Card")</p>
+
+    </div>
+
+    <div class="download">
+      <!-- append download HTML here -->
+    </div>
+
+    <div class="button-grid">
+      <button onclick="downloadCart()">下載訂單記錄</button>
+      <a href="./index.html"><button>再次下單</button></a>
+    </div>
+
+  </main>
+
+
+  </div>
+
+</body>
+
+</html>
