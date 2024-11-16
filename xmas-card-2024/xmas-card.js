@@ -431,7 +431,7 @@ function renderAlbum() {
                     ${design.texture ? `<div class="label">${design.texture}</div>` : ""}
                     ${design.corner ? `<div class="label">圓角</div>` : ""}
                     ${design.sided ? `<div class="label">${design.sided}</div>` : ""}
-                    ${design.size ? `<div class="label">${design.size}</div>` : ""}
+                    ${design.size ? `<div class="label">${design.size}mm</div>` : ""}
                   </div>
             
                   <div class="title">${design.title}</div>
