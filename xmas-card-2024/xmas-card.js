@@ -45,10 +45,10 @@ class BundleAny {
         });
 
         // set quantity
-        if (this.count === 7) {
-            this.quantity = Math.floor(total / 7)
+        if (this.count === 6) {
+            this.quantity = Math.floor(total / 6)
         } else if (this.count === 3) {
-            this.quantity = Math.floor((total % 7) / 3);
+            this.quantity = Math.floor((total % 6) / 3);
         }
     }
 
@@ -67,7 +67,7 @@ const designs = [
         corner: "圓角",
         price: 20,
         quantity: 0,
-        caption: "【Speak Slothlly】<br>任選3張，共$54(平均@$18)<br>任選7張，共$112(平均@$16)",
+        caption: "【Speak Slothlly】<br>任選3張，共$54(平均@$18)<br>任選6張，共$96(平均@$16)",
         path: "Not_Workin_Club.jpeg",
         formId: "entry.1173994594"
     },
@@ -82,7 +82,7 @@ const designs = [
         corner: "圓角",
         price: 20,
         quantity: 0,
-        caption: "【Speak Slothlly】<br>任選3張，共$54(平均@$18)<br>任選7張，共$112(平均@$16)",
+        caption: "【Speak Slothlly】<br>任選3張，共$54(平均@$18)<br>任選6張，共$96(平均@$16)",
         path: "必須酒.jpeg",
         formId: "entry.1599323526"
     },
@@ -97,7 +97,7 @@ const designs = [
         corner: "圓角",
         price: 20,
         quantity: 0,
-        caption: "【Speak Slothlly】<br>任選3張，共$54(平均@$18)<br>任選7張，共$112(平均@$16)",
+        caption: "【Speak Slothlly】<br>任選3張，共$54(平均@$18)<br>任選6張，共$96(平均@$16)",
         path: "Matcha_Tree.jpeg",
         formId: "entry.2121802125"
     },
@@ -112,7 +112,7 @@ const designs = [
         corner: "圓角",
         price: 20,
         quantity: 0,
-        caption: "【Speak Slothlly】<br>任選3張，共$54(平均@$18)<br>任選7張，共$112(平均@$16)",
+        caption: "【Speak Slothlly】<br>任選3張，共$54(平均@$18)<br>任選6張，共$96(平均@$16)",
         path: "幫你熄燈.jpeg",
         formId: "entry.1691780124"
     },
@@ -127,7 +127,7 @@ const designs = [
         corner: "圓角",
         price: 20,
         quantity: 0,
-        caption: "【Speak Slothlly】<br>任選3張，共$54(平均@$18)<br>任選7張，共$112(平均@$16)",
+        caption: "【Speak Slothlly】<br>任選3張，共$54(平均@$18)<br>任選6張，共$96(平均@$16)",
         path: "望下天.jpeg",
         formId: "entry.1966654916"
     },
@@ -142,7 +142,7 @@ const designs = [
         corner: "圓角",
         price: 20,
         quantity: 0,
-        caption: "【Speak Slothlly】<br>任選3張，共$54(平均@$18)<br>任選7張，共$112(平均@$16)",
+        caption: "【Speak Slothlly】<br>任選3張，共$54(平均@$18)<br>任選6張，共$96(平均@$16)",
         path: "Spin_In_Joy_With_Me.jpeg",
         formId: "entry.536212284"
     },
@@ -233,7 +233,7 @@ const designs = [
         id: "D1",
         designer: "Rachel",
         title: "Knock Knock!",
-        size: "164x102",
+        size: "165x102",
         orientation: "landscape",
         texture: "珠光紙",
         sided: "單面",
@@ -245,7 +245,7 @@ const designs = [
     {
         id: "E1",
         designer: "以健",
-        title: "聖誕點少得你（紅色）",
+        title: "聖誕點少得你(紅色)",
         size: "100x100",
         orientation: "portrait landscape",
         texture: "珍珠膜",
@@ -259,7 +259,7 @@ const designs = [
     {
         id: "E2",
         designer: "以健",
-        title: "聖誕點少得你（藍色）",
+        title: "聖誕點少得你(藍色)",
         size: "100x100",
         orientation: "portrait landscape",
         texture: "珍珠膜",
@@ -273,7 +273,7 @@ const designs = [
     {
         id: "E3",
         designer: "以健",
-        title: "聖誕點少得你（綠色）",
+        title: "聖誕點少得你(綠色)",
         size: "100x100",
         orientation: "portrait landscape",
         texture: "珍珠膜",
@@ -287,7 +287,7 @@ const designs = [
     {
         id: "E4",
         designer: "以健",
-        title: "聖誕點少得你（黑色）",
+        title: "聖誕點少得你(黑色)",
         size: "100x100",
         orientation: "portrait landscape",
         texture: "珍珠膜",
@@ -302,7 +302,7 @@ const designs = [
         id: "E5",
         designer: "以健",
         title: "專愛",
-        size: "164x102",
+        size: "165x102",
         orientation: "portrait",
         texture: "新棉彩紙",
         sided: "雙面",
@@ -315,7 +315,7 @@ const designs = [
     },
     {
         id: "Z1",
-        title: "信封 (牛皮色)",
+        title: "信封(牛皮色)",
         size: " 176x125",
         orientation: "信封",
         price: 3,
@@ -325,7 +325,7 @@ const designs = [
     },
     {
         id: "Z2",
-        title: "信封 (白金色)",
+        title: "信封(白金色)",
         size: " 176x125",
         orientation: "信封",
         price: 3,
@@ -335,7 +335,7 @@ const designs = [
     },
     {
         id: "Z3",
-        title: "信封 (藍色)",
+        title: "信封(藍色)",
         size: " 176x125",
         orientation: "信封",
         price: 3,
@@ -352,7 +352,7 @@ const bundles = [
 	new BundleSet(["B4", "B5"], "【@認真地求其系列】一套2款", 2, 0),
 	new BundleSet(["E1", "E2", "E3", "E4", "E5"], "【四色聖誕】+《專愛》一套5款", 7),
 	new BundleSet(["E1", "E2", "E3", "E4"], "【四色聖誕】一套4款", 2, 3),
-	new BundleAny(["A1", "A2", "A3", "A4", "A5", "A6", "A7"], "【Speak Slothlly】任選7張", 28, 7),
+	new BundleAny(["A1", "A2", "A3", "A4", "A5", "A6", "A7"], "【Speak Slothlly】任選6張", 24, 6),
 	new BundleAny(["A1", "A2", "A3", "A4", "A5", "A6", "A7"], "【Speak Slothlly】任選3張", 6, 3)
 ];
 
@@ -364,7 +364,6 @@ var totalQuant = 0;
 var totalSum = 0;
 var bundleSum = 0;
 var cardWidth = 0;
-
 var submitted = false;
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -529,7 +528,7 @@ function renderCart() {
             childDiv.innerHTML = `
               <div class="cart-item">
                   <div class="item-content">
-                      <div>折扣：${bundle.name} x${bundle.quantity} (-$${bundle.quantity * bundle.discount})</div>
+                      <div>折扣:${bundle.name} x${bundle.quantity} (-$${bundle.quantity * bundle.discount})</div>
                   </div>
               </div>
               <div class="divider"></div>

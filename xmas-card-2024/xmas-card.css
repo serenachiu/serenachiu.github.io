@@ -24,7 +24,6 @@
 /* sizes */
 :root {
   --icons-size: 22px;
-  --icons-size-sm: 22px;
 }
 
 * {
@@ -218,7 +217,7 @@ p {
 
 .subpage .container {
   width: 100%;
-  padding: 20px 30px;
+  padding: 20px 30px 40px 30px;
 }
 
 .divider {
@@ -309,7 +308,7 @@ p {
 }
 
 .cart-item i {
-  font-size: var(--icons-size-sm);
+  font-size: var(--icons-size);
 }
 
 
@@ -345,17 +344,14 @@ cart summary
   padding: 10px 10px;
   border: 1px solid lightgrey;
   border-radius: 5px;
-  /* font-size: 80%; */
 }
 
 .radio-group {
   display: flex;
   flex-direction: column;
-  /* font-size: 80%; */
 }
 
 .radio-label {
-  /* font-size: 80%; */
   padding-top: 10px;
 }
 
@@ -540,7 +536,7 @@ cart summary
   font-size: 12px;
   font-weight: 400;
   padding-top: 5px;
-  padding-right: 0px; /* 25 + 45 = 70 */
+  padding-right: 0px;
   color: darkgray;
 }
 
@@ -638,6 +634,10 @@ submission page
 
 */
 
+.submission {
+  margin: 30px 30px 50px 30px;
+}
+
 .submission .button-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -650,7 +650,7 @@ submission page
 
   text-align: center;
   cursor: pointer;
-
+  font-size: 16px;
   padding: 12px 22px;
   width: 100%;
   border-radius: 5px;
