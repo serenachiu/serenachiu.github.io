@@ -156,7 +156,7 @@ const designs = [
         sided: "單面",
         price: 15,
         quantity: 0,
-        caption: "【depressgon】<br>一套3款，共$36(平均@$11)<br>連【認真地求其系列】一套5款，共$46",
+        caption: "【depressgon】<br>一套3款，共$36(平均@$12)<br>連【認真地求其系列】一套5款，共$46",
         path: "Merry Christmas @depressgon.png",
         formId: "entry.1151205680"
     },
@@ -170,7 +170,7 @@ const designs = [
         sided: "單面",
         price: 15,
         quantity: 0,
-        caption: "【depressgon】<br>一套3款，共$36(平均@$11)<br>連【認真地求其系列】一套5款，共$46",
+        caption: "【depressgon】<br>一套3款，共$36(平均@$12)<br>連【認真地求其系列】一套5款，共$46",
         path: "Happy New Year @depressgon.png",
         formId: "entry.819435419"
     },
@@ -184,7 +184,7 @@ const designs = [
         sided: "單面",
         price: 15,
         quantity: 0,
-        caption: "【depressgon】<br>一套3款，共$36(平均@$11)<br>連【認真地求其系列】一套5款，共$46",
+        caption: "【depressgon】<br>一套3款，共$36(平均@$12)<br>連【認真地求其系列】一套5款，共$46",
         path: "酒能使人放蕩 @depressgon.png",
         formId: "entry.1100436445"
     },

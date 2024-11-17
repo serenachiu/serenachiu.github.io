@@ -582,6 +582,14 @@ Album :hover
   opacity: 1;
 }
 
+/* footer */
+
+.copyright {
+  font-size: 12px;
+  text-align: center;
+  padding: 30px;
+}
+
 
 /*
 
