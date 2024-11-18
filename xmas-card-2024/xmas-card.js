@@ -505,8 +505,9 @@ function renderCart() {
                   </div>
 
                   <div class="buttons">
-                      <span class="material-symbols-rounded add-more-to-cart" onclick="addCart(${index})">add_circle</span>
-                      <span class="material-symbols-rounded clear-cart" onclick="clearCart(${index})">delete</span>
+                      <span class="material-symbols-rounded" onclick="addCart(${index})">add_circle</span>
+                      <span class="material-symbols-rounded" onclick="removeCart(${index})">do_not_disturb_on</span>
+                      <span class="material-symbols-rounded" onclick="clearCart(${index})">delete</span>
                   </div>
 
               </div>
@@ -559,7 +560,18 @@ function addCart(index) {
     const div = document.getElementById(`cart-${index}`);
 
     fillCartIcon(div, true);
+    renderCart();
+}
 
+function removeCart(index) {
+    designs[index].quantity -= 1;
+    totalQuant -= 1;
+    totalSum -= designs[index].price;
+
+    if (designs[index].quantity === 0) {
+        const div = document.getElementById(`cart-${index}`);
+        fillCartIcon(div, false);
+    }
     renderCart();
 }
 
@@ -573,7 +585,6 @@ function clearCart(index) {
     const div = document.getElementById(`cart-${index}`);
 
     fillCartIcon(div, false);
-
     renderCart();
 }
 
