@@ -658,7 +658,7 @@ function formHandling() {
         inputs.push([document.getElementById("input-address").value,"entry.1446145504"]);
 
         inputs.push([totalQuant, "entry.389257763"]);
-        inputs.push([totalSum, "entry.1545759432"]);
+        inputs.push([totalSum - bundleSum, "entry.1545759432"]);
 
         inputs.forEach(input => {
             const div = document.createElement('input');
