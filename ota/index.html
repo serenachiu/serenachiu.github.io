@@ -94,7 +94,7 @@
             background: transparent;
             border: none;
             text-align: center;
-            font-size: 1.5rem;
+            font-size: 2rem;
             font-weight: bold;
             color: #3b82f6;
             outline: none;
@@ -202,7 +202,7 @@
             
             <div class="text-center">
                 <button onclick="divideTimeSlots()" class="bg-gradient-to-r from-teal-500 to-green-500 hover:from-teal-600 hover:to-green-600 text-white font-medium py-3 px-6 rounded-full flex items-center justify-center mx-auto transition-all transform hover:scale-105 active:scale-95 shadow-md text-sm">
-                    <i class="fas fa-divide mr-2"></i> 三個人，界到7點
+                    <i class="fas fa-divide mr-2"></i> 三人平均界到7點
                 </button>
             </div>
             
@@ -356,11 +356,14 @@
                     <div class="w-8 h-8 rounded-full bg-white bg-opacity-30 flex items-center justify-center mb-2">
                         <span class="text-lg font-bold">${index + 1}</span>
                     </div>
-                    <span class="text-sm font-bold mb-1">Slot ${index + 1}</span>
                     <div class="text-center">
-                        <span class="block text-sm">${slot.start}</span>
-                        <i class="fas fa-arrow-down text-xs my-1 opacity-70"></i>
-                        <span class="block text-sm">${slot.end}</span>
+                        <span class="block text-sm">
+                          ${slot.start}
+                          <span class="mx-1 text-base"></span>
+                          <i class="fas fa-arrow-right text-xs my-1 opacity-70"></i>
+                          <span class="mx-1 text-base"></span>
+                          ${slot.end}
+                        </span>
                     </div>
                 `;
                 
