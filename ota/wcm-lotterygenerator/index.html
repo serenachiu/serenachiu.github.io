@@ -92,7 +92,7 @@
             return ball;
           }
           document.getElementById('generateButton').addEventListener('click', () => {
-            const resultCount = parseInt(document.getElementById('resultCount').value) || 5;
+            const resultCount = parseInt(document.getElementById('resultCount').value) || 10;
             const allowDuplicates = document.getElementById('allowDuplicates').checked;
             const showDetails = document.getElementById('showDetails').checked;
             const [a, b] = pickRandomNumbers(1, 4, 2);
@@ -103,7 +103,7 @@
               if (i === a || i === b) {
                 return Array.from({
                   length: 10
-                }, (_, j) => 10 * i + j + 1);
+                }, (_, j) => 10 * i + j + 1).filter(n => n !== 50);
               }
               return [a, b, x, y].map(num => 10 * i + num).filter(n => n !== 50);
             });
