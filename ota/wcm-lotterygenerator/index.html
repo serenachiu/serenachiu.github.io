@@ -10,6 +10,44 @@
         <div class="max-w-4xl mx-auto">
           <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
             <h1 class="text-2xl font-bold text-indigo-700 mb-2">今期六合彩買咩好</h1>
+            
+            <div class="py-3">
+              <label class="block text-sm font-medium text-gray-700 mb-1">基數:</label>
+              <div class="flex gap-3">
+                <select id="a" class="custom-select bg-gray-50 border border-gray-300 text-gray-700 rounded-md py-1 pl-2 pr-8 focus:outline-none focus:ring-2 focus:ring-indigo-500 min-w-[60px] w-auto">
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                </select>
+                
+                <select id="b" class="custom-select bg-gray-50 border border-gray-300 text-gray-700 rounded-md py-1 pl-2 pr-8 focus:outline-none focus:ring-2 focus:ring-indigo-500 min-w-[60px] w-auto">
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                </select>
+                
+                <select id="x" class="custom-select bg-gray-50 border border-gray-300 text-gray-700 rounded-md py-1 pl-2 pr-8 focus:outline-none focus:ring-2 focus:ring-indigo-500 min-w-[60px] w-auto">
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                  <option value="0">0</option>
+                </select>
+                
+                <select id="y" class="custom-select bg-gray-50 border border-gray-300 text-gray-700 rounded-md py-1 pl-2 pr-8 focus:outline-none focus:ring-2 focus:ring-indigo-500 min-w-[60px] w-auto">
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                  <option value="0">0</option>
+                </select>
+
+              </div>
+            </div>
+            
+            
             <div class="mb-3 py-3">
               <label for="resultCount" class="block text-sm font-medium text-gray-700 mb-1">投注數量:</label>
               <div class="flex gap-3">
@@ -27,8 +65,8 @@
                 <label for="allowDuplicates" class="ml-2 block text-sm text-gray-700">允許重複模式</label>
               </div>
               <div class="flex items-center">
-                <input type="checkbox" id="showDetails" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
-                <label for="showDetails" class="ml-2 block text-sm text-gray-700">顯示數字Pool</label>
+                <input type="checkbox" id="randomBaseNum" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                <label for="randomBaseNum" class="ml-2 block text-sm text-gray-700">Random基數</label>
               </div>
             </div>
           </div>
@@ -94,34 +132,34 @@
           document.getElementById('generateButton').addEventListener('click', () => {
             const resultCount = parseInt(document.getElementById('resultCount').value) || 10;
             const allowDuplicates = document.getElementById('allowDuplicates').checked;
-            const showDetails = document.getElementById('showDetails').checked;
-            const [a, b] = pickRandomNumbers(1, 4, 2);
-            const [x, y] = pickRandomNumbers(6, 10, 2);
+            const showDetails = true;
+            const randomBaseNum = document.getElementById('randomBaseNum').checked;
+            
+            const [a, b] = randomBaseNum ? pickRandomNumbers(1, 4, 2) : [parseInt(document.getElementById('a').value), parseInt(document.getElementById('b').value)];
+            const [x, y] = randomBaseNum ? pickRandomNumbers(6, 10, 2) : [parseInt(document.getElementById('x').value), parseInt(document.getElementById('y').value)];
+            
             const pool = Array.from({
               length: 5
             }, (_, i) => {
               if (i === a || i === b) {
                 return Array.from({
                   length: 10
-                }, (_, j) => 10 * i + j + 1).filter(n => n !== 50);
+                }, (_, j) => 10 * i + j).filter(n => n !== 50);
               }
               return [a, b, x, y].map(num => 10 * i + num).filter(n => n !== 50);
             });
             const results = generateResults(pool, resultCount, allowDuplicates);
-            // Display algorithm details if requested
+            
+            // Display algorithm details
             const poolArraysContainer = document.getElementById('poolArrays');
             poolArraysContainer.innerHTML = '';
-            if (showDetails) {
-              pool.forEach(p => {
+            pool.forEach(p => {
                 const poolDiv = document.createElement('div');
                 poolDiv.className = "bg-gray-50 p-3 rounded";
                 poolDiv.innerHTML = p.join(', ');
                 poolArraysContainer.appendChild(poolDiv);
               });
               document.getElementById('variables').classList.remove('hidden');
-            } else {
-              document.getElementById('variables').classList.add('hidden');
-            }
             // Display results
             const resultsContainer = document.getElementById('resultsContainer');
             resultsContainer.innerHTML = '';
