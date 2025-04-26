@@ -1,234 +1,341 @@
 <!DOCTYPE html>
-    <html lang="en">
-      <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>今期六合彩買咩好</title>
-        <script src="https://cdn.tailwindcss.com"></script>
-      </head>
-      <body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen p-6">
-        <div class="max-w-4xl mx-auto">
-          <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
-            <h1 class="text-2xl font-bold text-indigo-700 mb-2">今期六合彩買咩好 (v2)</h1>
-            
-            <div class="py-3">
-              <label class="block text-sm font-medium text-gray-700 mb-1">基數:</label>
-              <div class="flex gap-3">
-                  <select id="a" class="custom-select bg-gray-50 border border-gray-300 text-gray-700 rounded-md py-1 pl-2 pr-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 min-w-[40px] w-auto">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                  </select>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>今期六合彩買咩好</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      .number-ball {
+        position: relative;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin: 2px;
+        cursor: pointer;
+        font-weight: bold;
+        color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), inset 0 -3px 0 rgba(0, 0, 0, 0.2), inset 0 3px 0 rgba(255, 255, 255, 0.2);
+      }
+      .number-ball.selected {
+        opacity: 1;
+      }
+      .number-ball.deselected {
+        opacity: 0.5;
+        position: relative;
+      }
+      .number-ball.deselected::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 80%;
+        height: 2px;
+        background-color: black;
+        transform: translate(-50%, -50%) rotate(45deg);
+      }
+      .pool-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        padding: 8px;
+        background-color: #f9fafb;
+        border-radius: 8px;
+        margin-bottom: 8px;
+      }
+      .pool-title {
+        font-weight: 500;
+        margin-bottom: 4px;
+        color: #374151;
+      }
+    </style>
+  </head>
+  <body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen p-6">
+    <div class="max-w-4xl mx-auto">
+      <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+        <h1 class="text-2xl font-bold text-indigo-700 mb-2">今期六合彩買咩好 (v2)</h1>
+        
+        <div class="py-3">
+          <label class="block text-sm font-medium text-gray-700 mb-1">基數:</label>
+          <div class="flex gap-3">
+              <select id="a" class="custom-select bg-gray-50 border border-gray-300 text-gray-700 rounded-md py-1 pl-2 pr-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 min-w-[40px] w-auto">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
 
-                  <select id="b" class="custom-select bg-gray-50 border border-gray-300 text-gray-700 rounded-md py-1 pl-2 pr-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 min-w-[40px] w-auto">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                  </select>
+              <select id="b" class="custom-select bg-gray-50 border border-gray-300 text-gray-700 rounded-md py-1 pl-2 pr-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 min-w-[40px] w-auto">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
 
-                  <select id="x" class="custom-select bg-gray-50 border border-gray-300 text-gray-700 rounded-md py-1 pl-2 pr-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 min-w-[40px] w-auto">
-                    <option value="5">5</option>
-                     <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                    <option value="0">0</option>
-                  </select>
+              <select id="x" class="custom-select bg-gray-50 border border-gray-300 text-gray-700 rounded-md py-1 pl-2 pr-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 min-w-[40px] w-auto">
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="0">0</option>
+              </select>
 
-                  <select id="y" class="custom-select bg-gray-50 border border-gray-300 text-gray-700 rounded-md py-1 pl-2 pr-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 min-w-[40px] w-auto">
-                    <option value="5">5</option>
-                     <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                    <option value="0">0</option>
-                  </select>
-                </div>
+              <select id="y" class="custom-select bg-gray-50 border border-gray-300 text-gray-700 rounded-md py-1 pl-2 pr-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 min-w-[40px] w-auto">
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="0">0</option>
+              </select>
             </div>
-            
-            
-            <div class="mb-3 py-3">
-              <label for="resultCount" class="block text-sm font-medium text-gray-700 mb-1">投注數量:</label>
-              <div class="flex gap-3">
-                <select id="resultCount" class="custom-select bg-gray-50 border border-gray-300 text-gray-700 rounded-md py-1 pl-2 pr-8 focus:outline-none focus:ring-2 focus:ring-indigo-500 min-w-[60px] w-auto">
-                  <option value="10">10</option>
-                  <option value="20">20</option>
-                  <option value="30">30</option>
-                </select>
-                <button id="generateButton" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-md transition duration-200"> GO! </button>
-              </div>
-            </div>
-            <div class="flex gap-6 mb-1">
-              <div class="flex items-center">
-                <input type="checkbox" id="allowDuplicates" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" checked>
-                <label for="allowDuplicates" class="ml-2 block text-sm text-gray-700">允許重複模式</label>
-              </div>
-              <div class="flex items-center">
-                <input type="checkbox" id="randomBaseNum" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
-                <label for="randomBaseNum" class="ml-2 block text-sm text-gray-700">Random基數</label>
-              </div>
-            </div>
-          </div>
-          <div id="variables" class="bg-white rounded-xl shadow-lg p-6 mb-6 hidden">
-            <h3 class="text-lg font-medium text-indigo-700 mb-2">數字Pool</h3>
-            <div id="poolArrays" class="space-y-2"></div>
-          </div>
-          <div id="results" class="bg-white rounded-xl shadow-lg p-6 hidden">
-            <h2 class="text-xl font-semibold text-indigo-700 mb-4">投注組合</h2>
-            <div id="resultsContainer" class="space-y-6"></div>
+        </div>
+        
+        
+        <div class="mb-3 py-3">
+          <label for="resultCount" class="block text-sm font-medium text-gray-700 mb-1">投注數量:</label>
+          <div class="flex gap-3">
+            <select id="resultCount" class="custom-select bg-gray-50 border border-gray-300 text-gray-700 rounded-md py-1 pl-2 pr-8 focus:outline-none focus:ring-2 focus:ring-indigo-500 min-w-[60px] w-auto">
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="30">30</option>
+            </select>
+            <button id="generateButton" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-md transition duration-200">顯示數字Pool</button>
           </div>
         </div>
-        <script>
-          // Function to pick random numbers without replacement
-          function pickRandomNumbers(nums, count) {
-            for (let i = nums.length - 1; i > 0; i--) {
-              const j = Math.floor(Math.random() * (i + 1));
-              [nums[i], nums[j]] = [nums[j], nums[i]];
-            }
-            return nums.slice(0, count);
+        <div class="flex gap-6 mb-1">
+          <div class="flex items-center">
+            <input type="checkbox" id="allowDuplicates" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" checked>
+            <label for="allowDuplicates" class="ml-2 block text-sm text-gray-700">允許重複模式</label>
+          </div>
+          <div class="flex items-center">
+            <input type="checkbox" id="randomBaseNum" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+            <label for="randomBaseNum" class="ml-2 block text-sm text-gray-700">Random基數</label>
+          </div>
+        </div>
+      </div>
+      <div id="variables" class="bg-white rounded-xl shadow-lg p-6 mb-6 hidden">
+        <h3 class="text-lg font-medium text-indigo-700 mb-2">數字Pool (點擊數字可取消選擇)</h3>
+        <div id="poolArrays" class="space-y-4"></div>
+        <div class="mt-4">
+          <button id="generateResultsButton" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-md transition duration-200">開始抽籤</button>
+        </div>
+      </div>
+      <div id="results" class="bg-white rounded-xl shadow-lg p-6 hidden">
+        <h2 class="text-xl font-semibold text-indigo-700 mb-4">投注組合</h2>
+        <div id="resultsContainer" class="space-y-6"></div>
+      </div>
+    </div>
+    <script>
+      // Function to pick random numbers without replacement
+      function pickRandomNumbers(nums, count) {
+        for (let i = nums.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [nums[i], nums[j]] = [nums[j], nums[i]];
+        }
+        return nums.slice(0, count);
+      }
+      
+      // Track deselected numbers
+      const deselectedNumbers = new Set();
+      let currentPool = [];
+      let currentParams = {};
+      
+      // Function to create a pool ball
+      function createPoolBall(number) {
+        const ball = document.createElement('div');
+        ball.className = "number-ball selected";
+        
+        // Set color based on number range
+        if (number < 10) ball.classList.add('bg-red-500');
+        else if (number < 20) ball.classList.add('bg-blue-500');
+        else if (number < 30) ball.classList.add('bg-green-500');
+        else if (number < 40) ball.classList.add('bg-yellow-500');
+        else ball.classList.add('bg-purple-500');
+        
+        ball.textContent = number;
+        
+        // Add click handler
+        ball.addEventListener('click', () => {
+          if (ball.classList.contains('deselected')) {
+            // Select the number
+            ball.classList.remove('deselected');
+            ball.classList.add('selected');
+            deselectedNumbers.delete(number);
+          } else {
+            // Deselect the number
+            ball.classList.remove('selected');
+            ball.classList.add('deselected');
+            deselectedNumbers.add(number);
           }
-          
-          
-          // Generator function
-          function generateResults(pool, count, allowDuplicates, a,b,x,y) {
-          
-          
-          	// Track used numbers per pool
-    		let usedNumbers = [];
-            
-            // Create results array
-  			let results = [];
-    		pool.push(pool.flat());
+        });
+        
+        return ball;
+      }
+      
+      // Function to create a number ball (for results)
+      function createBall(number, index) {
+        const ball = document.createElement('div');
+        ball.className = "w-9 h-9 rounded-full flex items-center justify-center text-white font-bold";
+        ball.classList.add(number < 10 ? 'bg-red-500' : number < 20 ? 'bg-blue-500' : number < 30 ? 'bg-green-500' : number < 40 ? 'bg-yellow-500' : 'bg-purple-500');
+        ball.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.1), inset 0 -3px 0 rgba(0, 0, 0, 0.2), inset 0 3px 0 rgba(255, 255, 255, 0.2)";
+        ball.textContent = number;
+        return ball;
+      }
+      
+      // Generator function (updated to filter out deselected numbers)
+      function generateResults(pool, count, allowDuplicates, a, b, x, y) {
+        // Filter out deselected numbers from each pool array
+        const filteredPool = pool.map(arr => arr.filter(n => !deselectedNumbers.has(n)));
+        filteredPool.push(filteredPool.flat()); // Add pool[5]
+        
+        // Track used numbers per pool
+        let usedNumbers = [];
+        let results = [];
+        
+        for (let i = 0; i < count; i++) {
+          let result = [];
+          let arrUsedNumbers = [];
 
-    		for (let i = 0; i < count; i++) {
-              let result = [];
-              let arrUsedNumbers = [];
+          // Function to get available numbers from a pool
+          const getAvailable = (poolIndex) => 
+              filteredPool[poolIndex].filter(n => !arrUsedNumbers.includes(n)).filter(num => 
+                  (allowDuplicates || !usedNumbers.includes(num))
+              );
 
-              // Function to get available numbers from a pool
-              const getAvailable = (poolIndex) => 
-                  pool[poolIndex].filter(n => !arrUsedNumbers.includes(n)).filter(num => 
-                      (allowDuplicates || !usedNumbers.includes(num))
-                  );
-
-              // 1. Select 2 numbers from pool[a]
-              let available = getAvailable(a);
-              while (result.length < 2) {
-                  if (available.length <= 0) {
-                      usedNumbers = usedNumbers.filter(item => !pool[a].includes(item));
-                      available = getAvailable(a);
-
-                  }
-                  const num = available[Math.floor(Math.random() * available.length)];
-                  result.push(num);
-                  arrUsedNumbers.push(num);
-                  if (!allowDuplicates) usedNumbers.push(num);
+          // 1. Select 2 numbers from pool[a]
+          let available = getAvailable(a);
+          while (result.length < 2) {
+              if (available.length <= 0) {
+                  usedNumbers = usedNumbers.filter(item => !filteredPool[a].includes(item));
                   available = getAvailable(a);
               }
+              const num = available[Math.floor(Math.random() * available.length)];
+              result.push(num);
+              arrUsedNumbers.push(num);
+              if (!allowDuplicates) usedNumbers.push(num);
+              available = getAvailable(a);
+          }
 
-              // 2. Select 2 numbers from pool[b]
-              available = getAvailable(b);
-              while (result.length < 4) {
-                  if (available.length <= 0) {
-                      usedNumbers = usedNumbers.filter(item => !pool[b].includes(item));
-                      available = getAvailable(b);
-
-                  }
-                  const num = available[Math.floor(Math.random() * available.length)];
-                  result.push(num);
-                  arrUsedNumbers.push(num);
-                  if (!allowDuplicates) usedNumbers.push(num);
+          // 2. Select 2 numbers from pool[b]
+          available = getAvailable(b);
+          while (result.length < 4) {
+              if (available.length <= 0) {
+                  usedNumbers = usedNumbers.filter(item => !filteredPool[b].includes(item));
                   available = getAvailable(b);
               }
+              const num = available[Math.floor(Math.random() * available.length)];
+              result.push(num);
+              arrUsedNumbers.push(num);
+              if (!allowDuplicates) usedNumbers.push(num);
+              available = getAvailable(b);
+          }
 
-              // 3. Select remaining 2 numbers from pool[5]
-              available = getAvailable(5);
-              while (result.length < 6) {
-                  if (available.length <= 0) {
-                      usedNumbers = usedNumbers.filter(item => !pool[5].includes(item));
-                      available = getAvailable(5);
-
-                  }
-                  const num = available[Math.floor(Math.random() * available.length)];
-                  result.push(num);
-                  arrUsedNumbers.push(num);
-                  if (!allowDuplicates) usedNumbers.push(num);
+          // 3. Select remaining 2 numbers from pool[5]
+          available = getAvailable(5);
+          while (result.length < 6) {
+              if (available.length <= 0) {
+                  usedNumbers = usedNumbers.filter(item => !filteredPool[5].includes(item));
                   available = getAvailable(5);
               }
-    
-              results.push(result);
-              //results.push(result.sort((a, b) => a - b));
-
+              const num = available[Math.floor(Math.random() * available.length)];
+              result.push(num);
+              arrUsedNumbers.push(num);
+              if (!allowDuplicates) usedNumbers.push(num);
+              available = getAvailable(5);
+          }
+          
+          //results.push(result);
+          results.push(result.sort((a, b) => a - b));
+        }
+        
+        return results;
+      }
+      
+      // First button click - show pool selection
+      document.getElementById('generateButton').addEventListener('click', () => {
+        const randomBaseNum = document.getElementById('randomBaseNum').checked;
+        
+        const [a, b] = randomBaseNum ? pickRandomNumbers([1,2,3,4], 2) : [parseInt(document.getElementById('a').value), parseInt(document.getElementById('b').value)];
+        const [x, y] = randomBaseNum ? pickRandomNumbers([6,7,8,9,0], 2) : [parseInt(document.getElementById('x').value), parseInt(document.getElementById('y').value)];
+        
+        currentParams = { a, b, x, y };
+        
+        currentPool = Array.from({
+          length: 5
+        }, (_, i) => {
+          if (i === a || i === b) {
+            return Array.from({
+              length: 10
+            }, (_, j) => 10 * i + j).filter(n => n !== 50);
+          }
+          return [a, b, x, y].map(num => 10 * i + num).filter(n => n !== 50);
+        });
+        currentPool[0] = currentPool[0].filter(n => n !== 0);
+        
+        // Display pool with selectable numbers
+        const poolArraysContainer = document.getElementById('poolArrays');
+        poolArraysContainer.innerHTML = '';
+        
+        currentPool.forEach((p, i) => {
+          const poolDiv = document.createElement('div');
+          poolDiv.className = "pool-container";
+          
+          const ballsContainer = document.createElement('div');
+          ballsContainer.className = "flex flex-wrap gap-1";
+          
+          p.forEach(num => {
+            const ball = createPoolBall(num);
+            // If this number was previously deselected, mark it
+            if (deselectedNumbers.has(num)) {
+              ball.classList.remove('selected');
+              ball.classList.add('deselected');
             }
-            
-            return results;
-          
-          }
-
-          
-          // Function to create a number ball
-          function createBall(number, index) {
-            const ball = document.createElement('div');
-            ball.className = "w-9 h-9 rounded-full flex items-center justify-center text-white font-bold";
-            ball.classList.add(index < 2 ? 'bg-red-500' : index < 4 ? 'bg-blue-500' : 'bg-green-500');
-            ball.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.1), inset 0 -3px 0 rgba(0, 0, 0, 0.2), inset 0 3px 0 rgba(255, 255, 255, 0.2)";
-            ball.textContent = number;
-            return ball;
-          }
-        
-        
-        document.getElementById('generateButton').addEventListener('click', () => {
-            const resultCount = parseInt(document.getElementById('resultCount').value) || 10;
-            const allowDuplicates = document.getElementById('allowDuplicates').checked;
-            const showDetails = true;
-            const randomBaseNum = document.getElementById('randomBaseNum').checked;
-            
-            const [a, b] = randomBaseNum ? pickRandomNumbers([1,2,3,4], 2) : [parseInt(document.getElementById('a').value), parseInt(document.getElementById('b').value)];
-            const [x, y] = randomBaseNum ? pickRandomNumbers([5,6,7,8,9,0], 2) : [parseInt(document.getElementById('x').value), parseInt(document.getElementById('y').value)];
-            
-            let pool = Array.from({
-              length: 5
-            }, (_, i) => {
-              if (i === a || i === b) {
-                return Array.from({
-                  length: 10
-                }, (_, j) => 10 * i + j).filter(n => n !== 50);
-              }
-              return [a, b, x, y].map(num => 10 * i + num).filter(n => n !== 50);
-            });
-            pool[0] = pool[0].filter(n => n !== 0);
-            const results = generateResults(pool, resultCount, allowDuplicates, a,b,x,y);
-            
-            // Display algorithm details
-            const poolArraysContainer = document.getElementById('poolArrays');
-            poolArraysContainer.innerHTML = '';
-            pool.pop(); //remove pool [5]
-            pool.forEach(p => {
-                const poolDiv = document.createElement('div');
-                poolDiv.className = "bg-gray-50 p-3 rounded";
-                poolDiv.innerHTML = p.join(', ');
-                poolArraysContainer.appendChild(poolDiv);
-              });
-              document.getElementById('variables').classList.remove('hidden');
-            // Display results
-            const resultsContainer = document.getElementById('resultsContainer');
-            resultsContainer.innerHTML = '';
-            results.forEach((result, i) => {
-              const resultDiv = document.createElement('div');
-              resultDiv.className = "bg-gray-50 rounded-lg p-3";
-              resultDiv.innerHTML = `
-													<h3 class="text-md font-medium text-gray-800 mb-3">第${i+1}注:</h3>`;
-              const ballsContainer = document.createElement('div');
-              ballsContainer.className = "flex flex-wrap gap-1 mb-1";
-              result.forEach((num, index) => {
-  ballsContainer.appendChild(createBall(num, index));
-});
-              resultDiv.appendChild(ballsContainer);
-              resultsContainer.appendChild(resultDiv);
-            });
-            document.getElementById('results').classList.remove('hidden');
+            ballsContainer.appendChild(ball);
           });
-        </script>
-      </body>
-    </html>
+          
+          poolDiv.appendChild(ballsContainer);
+          poolArraysContainer.appendChild(poolDiv);
+        });
+        
+        document.getElementById('variables').classList.remove('hidden');
+        document.getElementById('results').classList.add('hidden');
+      });
+      
+      // Second button click - generate results
+      document.getElementById('generateResultsButton').addEventListener('click', () => {
+        const resultCount = parseInt(document.getElementById('resultCount').value) || 10;
+        const allowDuplicates = document.getElementById('allowDuplicates').checked;
+        
+        // Generate and display results (using filtered pool)
+        const results = generateResults(
+          currentPool, 
+          resultCount, 
+          allowDuplicates, 
+          currentParams.a, 
+          currentParams.b, 
+          currentParams.x, 
+          currentParams.y
+        );
+        
+        // Display results
+        const resultsContainer = document.getElementById('resultsContainer');
+        resultsContainer.innerHTML = '';
+        results.forEach((result, i) => {
+          const resultDiv = document.createElement('div');
+          resultDiv.className = "bg-gray-50 rounded-lg p-3";
+          resultDiv.innerHTML = `
+            <h3 class="text-md font-medium text-gray-800 mb-3">第${i+1}注:</h3>`;
+          const ballsContainer = document.createElement('div');
+          ballsContainer.className = "flex flex-wrap gap-1 mb-1";
+          result.forEach((num, index) => ballsContainer.appendChild(createBall(num, index)));
+          resultDiv.appendChild(ballsContainer);
+          resultsContainer.appendChild(resultDiv);
+        });
+        document.getElementById('results').classList.remove('hidden');
+      });
+    </script>
+  </body>
+</html>
