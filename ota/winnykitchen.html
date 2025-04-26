@@ -1,0 +1,474 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>施房料理食譜</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f5f2;
+        }
+        
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .recipe-card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+        
+        .recipe-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .btn-primary {
+            background-color: #ff6b6b;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: #ff5252;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background-color: #4ecdc4;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #3dbbb4;
+            transform: translateY(-2px);
+        }
+        
+        input:focus, select:focus {
+            outline: 2px solid #ff6b6b;
+            border-color: transparent;
+        }
+        
+        .ingredient-row:nth-child(odd) {
+            background-color: #f9f9f9;
+        }
+        
+        .download-btn {
+            background-color: #6c5ce7;
+            transition: all 0.3s ease;
+        }
+        
+        .download-btn:hover {
+            background-color: #5b4bc7;
+            transform: translateY(-2px);
+        }
+        
+        .export-container {
+            background-color: white;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #results-container, #results-container * {
+                visibility: visible;
+            }
+            #results-container {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen p-4 md:p-8">
+        <div class="max-w-4xl mx-auto">
+            <header class="text-center mb-8">
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-2">施房料理食譜:D</h1>
+                <p class="text-gray-600">食譜份量計數機</p>
+            </header>
+            
+            <div class="recipe-card p-6 md:p-8 mb-8">
+                <h2 class="text-xl md:text-2xl font-semibold text-gray-800 mb-4">食譜內容</h2>
+                
+                <div class="mb-6">
+                    <label for="recipe-name" class="block text-gray-700 mb-2 font-medium">食譜名稱</label>
+                    <input type="text" id="recipe-name" placeholder="E.g., 蕃茄薯仔湯" 
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                </div>
+                
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">食材</h3>
+                    
+                    <div id="ingredients-container" class="mb-4 border border-gray-200 rounded-lg overflow-hidden">
+                        <!-- Ingredient rows will be added here -->
+                    </div>
+                    
+                    <div class="flex flex-wrap gap-3">
+                        <button id="add-ingredient" class="btn-secondary text-white px-4 py-2 rounded-lg font-medium flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                            </svg>
+                            添加食材
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">調整食譜</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label for="master-ingredient" class="block text-gray-700 mb-2 font-medium">主食材</label>
+                            <select id="master-ingredient" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                                <option value="">選擇主食材</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label for="new-amount" class="block text-gray-700 mb-2 font-medium">主食材新份量</label>
+                            <input type="number" id="new-amount" placeholder="輸入新份量" 
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                        </div>
+                    </div>
+                    
+                    <button id="calculate-btn" class="btn-primary text-white px-6 py-3 rounded-lg font-medium">
+                        開始計數
+                    </button>
+                </div>
+            </div>
+            
+            <div id="results-container" class="recipe-card p-6 md:p-8 hidden">
+                <div id="export-content">
+                    <h2 class="text-xl md:text-2xl font-semibold text-gray-800 mb-2">新調整食譜</h2>
+                    <p id="recipe-name-display" class="text-gray-600 mb-4"></p>
+                    
+                    <div class="mb-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-3">食材</h3>
+                        <div id="scaled-ingredients" class="border border-gray-200 rounded-lg overflow-hidden">
+                            <!-- Scaled ingredients will be added here -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex flex-wrap gap-3 mt-6 no-print">
+                    <button id="save-image-btn" class="download-btn text-white px-4 py-2 rounded-lg font-medium flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                        儲存圖片
+                    </button>
+                    <button id="back-btn" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg font-medium flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M9.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L7.414 9H15a1 1 0 110 2H7.414l2.293 2.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                        </svg>
+                        回到計算機
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Image preview modal -->
+            <div id="image-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+                <div class="bg-white rounded-lg p-6 max-w-3xl w-full max-h-[90vh] overflow-auto">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-bold">預覽圖片</h3>
+                        <button id="close-modal" class="text-gray-500 hover:text-gray-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div id="image-preview-container" class="mb-4 flex justify-center">
+                        <!-- Image will be inserted here -->
+                    </div>
+                    <div class="flex justify-center">
+                        <a id="download-link" class="download-btn text-white px-6 py-3 rounded-lg font-medium flex items-center" download="scaled-recipe.png">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                            下載圖片
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ingredientsContainer = document.getElementById('ingredients-container');
+            const addIngredientBtn = document.getElementById('add-ingredient');
+            const masterIngredientSelect = document.getElementById('master-ingredient');
+            const calculateBtn = document.getElementById('calculate-btn');
+            const resultsContainer = document.getElementById('results-container');
+            const recipeNameDisplay = document.getElementById('recipe-name-display');
+            const scaledIngredientsContainer = document.getElementById('scaled-ingredients');
+            const saveImageBtn = document.getElementById('save-image-btn');
+            const backBtn = document.getElementById('back-btn');
+            const imageModal = document.getElementById('image-modal');
+            const closeModalBtn = document.getElementById('close-modal');
+            const imagePreviewContainer = document.getElementById('image-preview-container');
+            const downloadLink = document.getElementById('download-link');
+            
+            let ingredientCount = 0;
+            
+            // Add initial ingredient rows
+            addIngredientRow();
+            addIngredientRow();
+            
+            // Add ingredient row function
+            function addIngredientRow() {
+                ingredientCount++;
+                const row = document.createElement('div');
+                row.className = 'ingredient-row flex flex-wrap items-center p-3 border-b border-gray-200 last:border-b-0';
+                row.innerHTML = `
+                    <div class="w-full md:w-1/3 mb-2 md:mb-0 md:pr-2">
+                        <input type="text" class="ingredient-name w-full px-3 py-2 border border-gray-300 rounded-lg" 
+                               placeholder="食材名稱" data-id="${ingredientCount}">
+                    </div>
+                    <div class="w-1/2 md:w-1/4 pr-1">
+                        <input type="number" class="ingredient-amount w-full px-3 py-2 border border-gray-300 rounded-lg" 
+                               placeholder="份量" data-id="${ingredientCount}">
+                    </div>
+                    <div class="w-1/2 md:w-1/4 pl-1 pr-1">
+                        <select class="ingredient-unit w-full px-3 py-2 border border-gray-300 rounded-lg" data-id="${ingredientCount}">
+                            <option value="g">grams (g)</option>
+                            <option value="kg">kilograms (kg)</option>
+                            <option value="ml">milliliters (ml)</option>
+                            <option value="l">liters (l)</option>
+                            <option value="tbsp">tablespoons</option>
+                            <option value="tsp">teaspoons</option>
+                            <option value="cup">cups</option>
+                        </select>
+                    </div>
+                    <div class="w-full md:w-auto mt-2 md:mt-0 md:pl-1">
+                        <button class="remove-ingredient text-red-500 hover:text-red-700 p-1" data-id="${ingredientCount}">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </div>
+                `;
+                
+                ingredientsContainer.appendChild(row);
+                
+                // Add event listener for remove button
+                const removeBtn = row.querySelector('.remove-ingredient');
+                removeBtn.addEventListener('click', function() {
+                    row.remove();
+                    updateMasterIngredientOptions();
+                });
+                
+                // Add event listeners for input changes
+                const nameInput = row.querySelector('.ingredient-name');
+                nameInput.addEventListener('input', updateMasterIngredientOptions);
+                
+                updateMasterIngredientOptions();
+            }
+            
+            // Update master ingredient dropdown options
+            function updateMasterIngredientOptions() {
+                const currentValue = masterIngredientSelect.value;
+                masterIngredientSelect.innerHTML = '<option value="">選擇主食材</option>';
+                
+                document.querySelectorAll('.ingredient-name').forEach(input => {
+                    if (input.value.trim() !== '') {
+                        const option = document.createElement('option');
+                        option.value = input.dataset.id;
+                        option.textContent = input.value;
+                        masterIngredientSelect.appendChild(option);
+                        
+                        if (input.dataset.id === currentValue) {
+                            option.selected = true;
+                        }
+                    }
+                });
+            }
+            
+            // Add ingredient button click handler
+            addIngredientBtn.addEventListener('click', addIngredientRow);
+            
+            // Calculate button click handler
+            calculateBtn.addEventListener('click', function() {
+                const recipeName = document.getElementById('recipe-name').value;
+                const masterIngredientId = masterIngredientSelect.value;
+                const newAmount = parseFloat(document.getElementById('new-amount').value);
+                
+                if (!masterIngredientId) {
+                    alert('請選擇主食材');
+                    return;
+                }
+                
+                if (isNaN(newAmount) || newAmount <= 0) {
+                    alert('請輸入有效份量');
+                    return;
+                }
+                
+                // Get master ingredient details
+                const masterNameInput = document.querySelector(`.ingredient-name[data-id="${masterIngredientId}"]`);
+                const masterAmountInput = document.querySelector(`.ingredient-amount[data-id="${masterIngredientId}"]`);
+                const masterUnitSelect = document.querySelector(`.ingredient-unit[data-id="${masterIngredientId}"]`);
+                
+                if (!masterNameInput || !masterAmountInput || !masterUnitSelect) {
+                    alert('請選擇主食材');
+                    return;
+                }
+                
+                const masterName = masterNameInput.value;
+                const masterAmount = parseFloat(masterAmountInput.value);
+                const masterUnit = masterUnitSelect.value;
+                
+                if (isNaN(masterAmount) || masterAmount <= 0) {
+                    alert('請輸入有效份量');
+                    return;
+                }
+                
+                // Calculate scaling factor
+                const scalingFactor = newAmount / masterAmount;
+                
+                // Display recipe name
+                recipeNameDisplay.textContent = recipeName || '未命名食譜';
+                
+                // Clear previous results
+                scaledIngredientsContainer.innerHTML = '';
+                
+                // Add header row
+                const headerRow = document.createElement('div');
+                headerRow.className = 'flex flex-wrap items-center p-3 bg-gray-100 font-medium';
+                headerRow.innerHTML = `
+                    <div class="w-full md:w-1/2 mb-1 md:mb-0">食材</div>
+                    <div class="w-1/2 md:w-1/4">原本</div>
+                    <div class="w-1/2 md:w-1/4">調整後</div>
+                `;
+                scaledIngredientsContainer.appendChild(headerRow);
+                
+                // Add scaled ingredient rows
+                document.querySelectorAll('.ingredient-row').forEach(row => {
+                    const nameInput = row.querySelector('.ingredient-name');
+                    const amountInput = row.querySelector('.ingredient-amount');
+                    const unitSelect = row.querySelector('.ingredient-unit');
+                    
+                    if (nameInput.value.trim() === '' || isNaN(parseFloat(amountInput.value))) {
+                        return; // Skip invalid ingredients
+                    }
+                    
+                    const name = nameInput.value;
+                    const originalAmount = parseFloat(amountInput.value);
+                    const unit = unitSelect.value;
+                    const scaledAmount = originalAmount * scalingFactor;
+                    
+                    const scaledRow = document.createElement('div');
+                    scaledRow.className = 'ingredient-row flex flex-wrap items-center p-3 border-b border-gray-200 last:border-b-0';
+                    
+                    // Highlight master ingredient
+                    if (nameInput.dataset.id === masterIngredientId) {
+                        scaledRow.classList.add('bg-yellow-50');
+                    }
+                    
+                    scaledRow.innerHTML = `
+                        <div class="w-full md:w-1/2 mb-1 md:mb-0 font-medium">${name}</div>
+                        <div class="w-1/2 md:w-1/4 text-gray-600">${originalAmount} ${unit}</div>
+                        <div class="w-1/2 md:w-1/4 font-medium">${scaledAmount.toFixed(1)} ${unit}</div>
+                    `;
+                    
+                    scaledIngredientsContainer.appendChild(scaledRow);
+                });
+                
+                // Show results
+                resultsContainer.classList.remove('hidden');
+                
+                // Scroll to results
+                resultsContainer.scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            // Save as image button click handler
+            saveImageBtn.addEventListener('click', function() {
+                const exportContent = document.getElementById('export-content');
+                
+                // Add a temporary class for better styling during capture
+                exportContent.classList.add('export-container', 'p-8', 'rounded-lg');
+                
+                // Use html2canvas to capture the content
+                html2canvas(exportContent, {
+                    backgroundColor: '#ffffff',
+                    scale: 2, // Higher resolution
+                    logging: false,
+                    useCORS: true
+                }).then(canvas => {
+                    // Remove temporary styling
+                    exportContent.classList.remove('export-container', 'p-8', 'rounded-lg');
+                    
+                    // Clear previous preview
+                    imagePreviewContainer.innerHTML = '';
+                    
+                    // Add the canvas to the preview container
+                    imagePreviewContainer.appendChild(canvas);
+                    
+                    // Set download link
+                    const imageData = canvas.toDataURL('image/png');
+                    downloadLink.href = imageData;
+                    
+                    // Set filename with recipe name
+                    const recipeName = document.getElementById('recipe-name').value || 'recipe';
+                    downloadLink.download = `${recipeName.replace(/\s+/g, '-').toLowerCase()}-scaled.png`;
+                    
+                    // Show modal
+                    imageModal.classList.remove('hidden');
+                }).catch(err => {
+                    console.error('Error generating image:', err);
+                    alert('未能產生圖片，請再試一次。');
+                });
+            });
+            
+            // Back button click handler
+            backBtn.addEventListener('click', function() {
+                resultsContainer.classList.add('hidden');
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+            
+            // Close modal button click handler
+            closeModalBtn.addEventListener('click', function() {
+                imageModal.classList.add('hidden');
+            });
+            
+            // Close modal when clicking outside
+            imageModal.addEventListener('click', function(e) {
+                if (e.target === imageModal) {
+                    imageModal.classList.add('hidden');
+                }
+            });
+            
+            // Add input event listeners for all ingredient fields
+            document.addEventListener('input', function(e) {
+                if (e.target.classList.contains('ingredient-name')) {
+                    updateMasterIngredientOptions();
+                }
+            });
+            
+            // Escape key to close modal
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && !imageModal.classList.contains('hidden')) {
+                    imageModal.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
