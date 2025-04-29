@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>加貨Checklist</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f3f4f6;
+            font-size: 0.9rem;
+        }
+
+        .checklist-card {
+            transition: all 0.3s ease;
+            border-radius: 16px;
+        }
+
+        .item-cell {
+            transition: all 0.2s ease;
+            cursor: pointer;
+            user-select: none;
+            border-radius: 8px;
+        }
+
+        .item-cell:hover {
+            background-color: #e0f2fe;
+        }
+
+        .item-cell.selected {
+            background-color: #3b82f6;
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);
+        }
+
+        .item-cell.checked {
+            color: #9ca3af;
+            background-color: #f9fafb;
+        }
+
+        .group-header {
+            transition: all 0.2s ease;
+            border-radius: 8px;
+        }
+
+        .group-header:hover {
+            background-color: #f1f5f9;
+        }
+
+        .btn {
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .room-header {
+            background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
+        }
+
+        .all-rooms-header {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        }
+
+        .notes-header {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+
+        .delete-btn {
+            transition: all 0.2s ease;
+        }
+
+        .delete-btn:hover {
+            background-color: #ef4444;
+            color: white;
+        }
+
+        .group-items {
+            transition: max-height 0.3s ease, opacity 0.3s ease;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+
+        .group-items.open {
+            max-height: 1000px;
+            opacity: 1;
+        }
+
+        .chevron {
+            transition: transform 0.3s ease;
+        }
+
+        .chevron.open {
+            transform: rotate(180deg);
+        }
+
+        .modal {
+            backdrop-filter: blur(5px);
+        }
+
+        .room-tab {
+            transition: all 0.2s ease;
+            font-size: 0.85rem;
+        }
+
+        .room-tab.active {
+            background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);
+        }
+
+        .room-tab:hover:not(.active) {
+            background-color: #e0f2fe;
+        }
+
+        .all-rooms-tab.active {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.3);
+        }
+
+        .notes-tab.active {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.3);
+        }
+
+        .trash-icon {
+            transition: all 0.2s ease;
+        }
+
+        .trash-icon:hover {
+            color: #ef4444;
+            transform: scale(1.1);
+        }
+
+        .room-badge {
+            background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
+        }
+
+        .all-rooms-item {
+            background-color: #f8fafc;
+            border-color: #e2e8f0;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .all-rooms-item:hover {
+            border-color: #cbd5e1;
+            background-color: #f1f5f9;
+        }
+
+        .all-rooms-item.clicked {
+            background-color: #dbeafe;
+            border-color: #93c5fd;
+        }
+
+        .all-rooms-group {
+            transition: all 0.2s ease;
+        }
+
+        .all-rooms-group-header {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .all-rooms-group-header:hover {
+            background-color: #f1f5f9;
+        }
+
+        .crossed-text {
+            text-decoration: line-through;
+            color: #6b7280;
+        }
+
+        .notes-textarea {
+            resize: none;
+            min-height: 300px;
+            transition: all 0.2s ease;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .notes-textarea:focus {
+            border-color: #10b981;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+            outline: none;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen">
+    <div class="min-h-screen flex flex-col">
+        <header class="bg-gradient-to-r from-indigo-700 to-blue-600 text-white p-4 shadow-lg">
+            <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center mb-3 md:mb-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" viewBox="0 0 20 20"
+                        fill="currentColor">
+                        <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+                        <path fill-rule="evenodd"
+                            d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    <h1 class="text-xl font-bold">加貨Checklist</h1>
+                </div>
+                <div class="flex space-x-2">
+                    <button id="allRoomsBtn"
+                        class="bg-white bg-opacity-20 text-white px-4 py-1.5 rounded-lg text-sm font-medium hover:bg-opacity-30 flex items-center shadow-md border border-white border-opacity-30">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" viewBox="0 0 20 20"
+                            fill="currentColor">
+                            <path
+                                d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z" />
+                        </svg>
+                        所有房
+                    </button>
+                    <button id="notesBtn"
+                        class="bg-white text-green-700 px-4 py-1.5 rounded-lg text-sm font-medium hover:bg-green-100 flex items-center shadow-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" viewBox="0 0 20 20"
+                            fill="currentColor">
+                            <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
+                            <path fill-rule="evenodd"
+                                d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        筆記
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-grow p-3 md:p-4">
+            <div class="max-w-6xl mx-auto">
+                <!-- Room Tabs -->
+                <div id="roomTabsContainer" class="hidden mb-4 overflow-x-auto">
+                    <div class="flex space-x-2 p-1">
+                        <!-- Room tabs will be added here -->
+                    </div>
+                </div>
+
+                <!-- Checklists Container -->
+                <div id="checklistsContainer" class="hidden">
+                    <!-- Active checklist will be shown here -->
+                </div>
+
+                <!-- All Rooms View -->
+                <div id="allRoomsContainer" class="hidden">
+                    <!-- All selected items across rooms will be shown here -->
+                </div>
+
+                <!-- Notes View -->
+                <div id="notesContainer" class="hidden">
+                    <!-- Notes content will be shown here -->
+                </div>
+
+                <!-- Loading Indicator -->
+                <div id="loadingIndicator" class="bg-white rounded-2xl shadow-xl p-10 text-center">
+                    <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-500 mx-auto mb-6">
+                    </div>
+                    <h2 class="text-xl font-semibold text-gray-800 mb-3">Loading Data</h2>
+                    <p class="text-gray-600 max-w-md mx-auto">Fetching inventory items from the server...</p>
+                </div>
+
+                <!-- No Checklists Message -->
+                <div id="noChecklistsMessage" class="bg-white rounded-2xl shadow-xl p-10 text-center hidden">
+                    <div class="bg-blue-50 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-blue-500" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                        </svg>
+                    </div>
+                    <h2 class="text-xl font-semibold text-gray-800 mb-3">未有Checklist</h2>
+                    <!--<p class="text-gray-600 mb-6 max-w-md mx-auto">Create your first room checklist to start tracking items and managing your inventory.</p>-->
+                    <button id="createFirstChecklistBtn"
+                        class="bg-gradient-to-r from-indigo-600 to-blue-500 text-white px-6 py-2 rounded-lg text-sm font-medium hover:from-indigo-700 hover:to-blue-600 shadow-md">
+                        開始加嘢
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!--<footer class="bg-gray-800 text-white p-3 text-center text-xs">
+            <p>Smart Room Checklist &copy; 2023 | All Rights Reserved</p>
+        </footer>-->
+    </div>
+
+    <!-- New Checklist Modal -->
+    <div id="newChecklistModal"
+        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden modal">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 overflow-hidden animate-fade-in">
+            <div class="bg-gradient-to-r from-indigo-600 to-blue-500 text-white px-5 py-3">
+                <!--<h3 class="text-lg font-semibold">Create New Checklist</h3>-->
+            </div>
+            <div class="p-5">
+                <div class="mb-4">
+                    <label for="roomNumberSelect" class="block text-gray-700 font-medium mb-2 text-sm">選擇房號</label>
+                    <select id="roomNumberSelect"
+                        class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white text-sm">
+                        <!-- Room numbers will be added here -->
+                    </select>
+                </div>
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button id="cancelNewChecklist"
+                        class="px-4 py-1.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 font-medium text-sm">
+                        取消
+                    </button>
+                    <button id="createNewChecklist"
+                        class="px-4 py-1.5 bg-gradient-to-r from-indigo-600 to-blue-500 text-white rounded-lg hover:from-indigo-700 hover:to-blue-600 font-medium shadow-md text-sm">
+                        確認
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Updated room numbers
+        const roomNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 21, 22, 23];
+
+        // DOM Elements
+        const roomTabsContainer = document.getElementById('roomTabsContainer');
+        const checklistsContainer = document.getElementById('checklistsContainer');
+        const allRoomsContainer = document.getElementById('allRoomsContainer');
+        const notesContainer = document.getElementById('notesContainer');
+        const noChecklistsMessage = document.getElementById('noChecklistsMessage');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const notesBtn = document.getElementById('notesBtn');
+        const allRoomsBtn = document.getElementById('allRoomsBtn');
+        const createFirstChecklistBtn = document.getElementById('createFirstChecklistBtn');
+        const newChecklistModal = document.getElementById('newChecklistModal');
+        const roomNumberSelect = document.getElementById('roomNumberSelect');
+        const cancelNewChecklist = document.getElementById('cancelNewChecklist');
+        const createNewChecklist = document.getElementById('createNewChecklist');
+
+        // State
+        let inventoryItems = [];
+        let checklists = [];
+        let activeChecklistId = null;
+        const ALL_ROOMS_VIEW = 'all-rooms-view';
+        const NOTES_VIEW = 'notes-view';
+        let clickedItems = JSON.parse(localStorage.getItem('clickedItems') || '{}');
+        let notesContent = localStorage.getItem('notesContent') || '';
+
+        // Initialize the application
+        async function init() {
+            try {
+                // Show loading indicator
+                loadingIndicator.classList.remove('hidden');
+                noChecklistsMessage.classList.add('hidden');
+
+                // Fetch inventory items from the provided URL
+                const response = await fetch('https://script.google.com/macros/s/AKfycbxwxvReKFrlZq67UmlpHglk9YGancVFb4uMYIoYNW8Wt2ZJ9GwynwB7bu4gInjlpo1CTQ/exec?type=addcart');
+                const data = await response.json();
+
+                // Process the fetched data
+                inventoryItems = processInventoryData(data);
+
+                // Load checklists from local storage
+                loadChecklists();
+
+                // Create default Room 1 checklist if no checklists exist
+                if (checklists.length === 0) {
+                    createDefaultChecklist();
+                }
+
+                // Populate room number dropdown
+                populateRoomNumbers();
+
+                // Set up event listeners
+                setupEventListeners();
+
+                // Set active checklist (first one if exists)
+                if (checklists.length > 0) {
+                    activeChecklistId = checklists[0].id;
+                }
+
+                // Hide loading indicator
+                loadingIndicator.classList.add('hidden');
+
+                // Render UI
+                renderUI();
+            } catch (error) {
+                console.error('Error initializing application:', error);
+                loadingIndicator.innerHTML = `
+                    <div class="bg-red-50 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <h2 class="text-xl font-semibold text-gray-800 mb-3">Error Loading Data</h2>
+                    <p class="text-gray-600 max-w-md mx-auto mb-6">Unable to fetch inventory items from the server. Please try again later.</p>
+                    <button id="retryButton" class="bg-gradient-to-r from-indigo-600 to-blue-500 text-white px-6 py-2 rounded-lg text-sm font-medium hover:from-indigo-700 hover:to-blue-600 shadow-md">
+                        Retry
+                    </button>
+                `;
+
+                document.getElementById('retryButton').addEventListener('click', init);
+            }
+        }
+
+        // Process inventory data from the API
+        function processInventoryData(data) {
+            // Check if data is in expected format
+            if (!data || !Array.isArray(data)) {
+                console.error('Invalid data format:', data);
+                return [];
+            }
+
+            // Group items by category
+            const groupedItems = data.reduce((acc, item) => {
+                const group = item.group || 'Uncategorized';
+
+                if (!acc.find(g => g.group === group)) {
+                    acc.push({
+                        group: group,
+                        items: []
+                    });
+                }
+
+                const groupIndex = acc.findIndex(g => g.group === group);
+                acc[groupIndex].items.push({
+                    name: item.name || 'Unnamed Item'
+                });
+
+                return acc;
+            }, []);
+
+            return groupedItems;
+        }
+
+        // Create default Room 1 checklist
+        function createDefaultChecklist() {
+            // Create items grouped by category
+            const groupedItems = {};
+            inventoryItems.forEach(group => {
+                groupedItems[group.group] = {
+                    expanded: group.group === inventoryItems[0].group, // Open first group by default
+                    items: group.items.map(item => ({
+                        name: item.name,
+                        selected: false
+                    }))
+                };
+            });
+
+            // Create new checklist for Room 1
+            const defaultChecklist = {
+                id: Date.now(),
+                roomNumber: 1,
+                groupedItems: groupedItems
+            };
+
+            // Add to checklists
+            checklists.push(defaultChecklist);
+
+            // Save to local storage
+            saveChecklists();
+        }
+
+        // Load checklists from local storage
+        function loadChecklists() {
+            const storedChecklists = localStorage.getItem('roomChecklists');
+            if (storedChecklists) {
+                checklists = JSON.parse(storedChecklists);
+            }
+        }
+
+        // Save checklists to local storage
+        function saveChecklists() {
+            localStorage.setItem('roomChecklists', JSON.stringify(checklists));
+        }
+
+        // Save clicked items to local storage
+        function saveClickedItems() {
+            localStorage.setItem('clickedItems', JSON.stringify(clickedItems));
+        }
+
+        // Save notes content to local storage
+        function saveNotesContent() {
+            localStorage.setItem('notesContent', notesContent);
+        }
+
+        // Populate room numbers dropdown
+        function populateRoomNumbers() {
+            roomNumberSelect.innerHTML = '';
+
+            // Filter out room numbers that already have checklists
+            const usedRoomNumbers = checklists.map(checklist => checklist.roomNumber);
+            const availableRoomNumbers = roomNumbers.filter(room => !usedRoomNumbers.includes(room));
+
+            if (availableRoomNumbers.length === 0) {
+                // If all rooms have checklists, show all rooms
+                roomNumbers.forEach(room => {
+                    const option = document.createElement('option');
+                    option.value = room;
+                    option.textContent = `TH.${room}`;
+                    roomNumberSelect.appendChild(option);
+                });
+            } else {
+                // Show only available rooms
+                availableRoomNumbers.forEach(room => {
+                    const option = document.createElement('option');
+                    option.value = room;
+                    option.textContent = `TH.${room}`;
+                    roomNumberSelect.appendChild(option);
+                });
+            }
+        }
+
+        // Set up event listeners
+        function setupEventListeners() {
+            // Notes button
+            notesBtn.addEventListener('click', function () {
+                activeChecklistId = NOTES_VIEW;
+                renderUI();
+            });
+
+            // All rooms button
+            allRoomsBtn.addEventListener('click', function () {
+                activeChecklistId = ALL_ROOMS_VIEW;
+                renderUI();
+            });
+
+            // Create first checklist button
+            createFirstChecklistBtn.addEventListener('click', openNewChecklistModal);
+
+            // Cancel new checklist
+            cancelNewChecklist.addEventListener('click', closeNewChecklistModal);
+
+            // Create new checklist
+            createNewChecklist.addEventListener('click', handleCreateNewChecklist);
+
+            // Close modal when clicking outside
+            newChecklistModal.addEventListener('click', function (e) {
+                if (e.target === newChecklistModal) {
+                    closeNewChecklistModal();
+                }
+            });
+        }
+
+        // Open new checklist modal
+        function openNewChecklistModal() {
+            populateRoomNumbers();
+            newChecklistModal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Close new checklist modal
+        function closeNewChecklistModal() {
+            newChecklistModal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Handle create new checklist
+        function handleCreateNewChecklist() {
+            const roomNumber = parseInt(roomNumberSelect.value);
+
+            // Check if checklist for this room already exists
+            const existingIndex = checklists.findIndex(checklist => checklist.roomNumber === roomNumber);
+
+            if (existingIndex !== -1) {
+                // If exists, ask for confirmation to replace
+                if (confirm(`A checklist for TH.${roomNumber} already exists. Do you want to replace it?`)) {
+                    checklists.splice(existingIndex, 1);
+                } else {
+                    return;
+                }
+            }
+
+            // Create items grouped by category
+            const groupedItems = {};
+            inventoryItems.forEach(group => {
+                groupedItems[group.group] = {
+                    expanded: false, // Default collapsed state
+                    items: group.items.map(item => ({
+                        name: item.name,
+                        selected: false
+                    }))
+                };
+            });
+
+            // Create new checklist
+            const newChecklist = {
+                id: Date.now(),
+                roomNumber: roomNumber,
+                groupedItems: groupedItems
+            };
+
+            // Add to checklists
+            checklists.push(newChecklist);
+
+            // Set as active checklist
+            activeChecklistId = newChecklist.id;
+
+            // Save to local storage
+            saveChecklists();
+
+            // Close modal
+            closeNewChecklistModal();
+
+            // Render UI
+            renderUI();
+        }
+
+        // Render UI
+        function renderUI() {
+            if (checklists.length === 0) {
+                // Show no checklists message
+                roomTabsContainer.classList.add('hidden');
+                checklistsContainer.classList.add('hidden');
+                allRoomsContainer.classList.add('hidden');
+                notesContainer.classList.add('hidden');
+                noChecklistsMessage.classList.remove('hidden');
+            } else {
+                // Show tabs and checklist
+                roomTabsContainer.classList.remove('hidden');
+                noChecklistsMessage.classList.add('hidden');
+
+                // Render room tabs
+                renderRoomTabs();
+
+                // Update button states
+                if (activeChecklistId === ALL_ROOMS_VIEW) {
+                    allRoomsBtn.classList.add('bg-opacity-40');
+                    allRoomsBtn.classList.add('font-semibold');
+                    notesBtn.classList.remove('bg-green-700');
+                    notesBtn.classList.remove('text-white');
+                    notesBtn.classList.add('text-green-700');
+                    notesBtn.classList.add('bg-white');
+                } else if (activeChecklistId === NOTES_VIEW) {
+                    allRoomsBtn.classList.remove('bg-opacity-40');
+                    allRoomsBtn.classList.remove('font-semibold');
+                    notesBtn.classList.add('bg-green-700');
+                    notesBtn.classList.add('text-white');
+                    notesBtn.classList.remove('text-green-700');
+                    notesBtn.classList.remove('bg-white');
+                } else {
+                    allRoomsBtn.classList.remove('bg-opacity-40');
+                    allRoomsBtn.classList.remove('font-semibold');
+                    notesBtn.classList.remove('bg-green-700');
+                    notesBtn.classList.remove('text-white');
+                    notesBtn.classList.add('text-green-700');
+                    notesBtn.classList.add('bg-white');
+                }
+
+                // Show appropriate container based on active view
+                if (activeChecklistId === ALL_ROOMS_VIEW) {
+                    checklistsContainer.classList.add('hidden');
+                    notesContainer.classList.add('hidden');
+                    allRoomsContainer.classList.remove('hidden');
+                    renderAllRoomsView();
+                } else if (activeChecklistId === NOTES_VIEW) {
+                    checklistsContainer.classList.add('hidden');
+                    allRoomsContainer.classList.add('hidden');
+                    notesContainer.classList.remove('hidden');
+                    renderNotesView();
+                } else {
+                    checklistsContainer.classList.remove('hidden');
+                    allRoomsContainer.classList.add('hidden');
+                    notesContainer.classList.add('hidden');
+                    renderActiveChecklist();
+                }
+            }
+        }
+
+        // Render room tabs
+        function renderRoomTabs() {
+            const tabsDiv = roomTabsContainer.querySelector('div');
+            tabsDiv.innerHTML = '';
+
+            // Sort checklists by room number
+            const sortedChecklists = [...checklists].sort((a, b) => a.roomNumber - b.roomNumber);
+
+            // Create tab for each room
+            sortedChecklists.forEach(checklist => {
+                const tab = document.createElement('button');
+                tab.className = `room-tab px-3 py-2 rounded-lg font-medium flex items-center ${checklist.id === activeChecklistId ? 'active' : 'bg-white text-gray-700'}`;
+                tab.dataset.id = checklist.id;
+
+                tab.innerHTML = `<span>TH.${checklist.roomNumber}</span>`;
+
+                // Add click event
+                tab.addEventListener('click', function () {
+                    activeChecklistId = checklist.id;
+                    renderUI();
+                });
+
+                tabsDiv.appendChild(tab);
+            });
+
+            // Add "New Room" tab
+            const newRoomTab = document.createElement('button');
+            newRoomTab.className = 'room-tab px-3 py-2 rounded-lg font-medium bg-white text-gray-700 flex items-center';
+            newRoomTab.innerHTML = `
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+                </svg>
+                <span>加新房</span>
+            `;
+
+            newRoomTab.addEventListener('click', openNewChecklistModal);
+            tabsDiv.appendChild(newRoomTab);
+        }
+
+        // Render active checklist
+        function renderActiveChecklist() {
+            checklistsContainer.innerHTML = '';
+
+            // Find active checklist
+            const checklist = checklists.find(c => c.id === activeChecklistId);
+            if (!checklist) return;
+
+            // Create checklist card
+            const card = createChecklistCard(checklist);
+            checklistsContainer.appendChild(card);
+        }
+
+        // Render Notes view
+        function renderNotesView() {
+            notesContainer.innerHTML = '';
+
+            // Create Notes card
+            const card = document.createElement('div');
+            card.className = 'checklist-card bg-white shadow-xl overflow-hidden';
+
+            // Create header
+            const header = document.createElement('div');
+            header.className = 'notes-header text-white p-4';
+
+            header.innerHTML = `
+                <div class="flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
+                        <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
+                    </svg>
+                    <div>
+                        <h2 class="text-lg font-bold">筆記</h2>
+                    </div>
+                </div>
+            `; // <p class="text-green-100 mt-0.5 text-xs">Write down any additional information</p>
+
+            // Create content container
+            const contentContainer = document.createElement('div');
+            contentContainer.className = 'p-4';
+
+            // Create textarea
+            const textarea = document.createElement('textarea');
+            textarea.className = 'notes-textarea w-full p-4 text-gray-700';
+            textarea.placeholder = 'Type your notes here...';
+            textarea.value = notesContent;
+
+            // Add event listener to save notes content
+            textarea.addEventListener('input', function () {
+                notesContent = this.value;
+                saveNotesContent();
+            });
+
+            contentContainer.appendChild(textarea);
+
+            // Assemble card
+            card.appendChild(header);
+            card.appendChild(contentContainer);
+            notesContainer.appendChild(card);
+        }
+
+        // Render All Rooms view
+        function renderAllRoomsView() {
+            allRoomsContainer.innerHTML = '';
+
+            // Create All Rooms card
+            const card = document.createElement('div');
+            card.className = 'checklist-card bg-white shadow-xl overflow-hidden';
+
+            // Create header
+            const header = document.createElement('div');
+            header.className = 'all-rooms-header text-white p-4';
+
+            // Calculate total selected items across all rooms
+            let totalSelectedCount = 0;
+            checklists.forEach(checklist => {
+                Object.values(checklist.groupedItems).forEach(group => {
+                    totalSelectedCount += group.items.filter(item => item.selected).length;
+                });
+            });
+
+            header.innerHTML = `
+                <div class="flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z" />
+                    </svg>
+                    <div>
+                        <h2 class="text-lg font-bold">所有房</h2>
+                        <p class="text-blue-100 mt-0.5 text-xs">${totalSelectedCount} items checked</p>
+                    </div>
+                </div>
+            `; // <p class="text-blue-100 mt-0.5 text-xs">${totalSelectedCount} items checked across all rooms</p>
+
+            // Create content container
+            const contentContainer = document.createElement('div');
+            contentContainer.className = 'p-4';
+
+            if (totalSelectedCount === 0) {
+                // No items selected
+                const emptyMessage = document.createElement('div');
+                emptyMessage.className = 'text-center py-8 text-gray-500';
+                emptyMessage.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                    </svg>
+                    <p class="text-base font-medium">未有嘢要加</p>
+                `; // <p class="mt-1 text-sm">Select items in room checklists to see them appear here</p>
+                contentContainer.appendChild(emptyMessage);
+            } else {
+                // Get all selected items across all rooms
+                const selectedItemsByGroup = {};
+
+                // Collect all selected items grouped by category
+                checklists.forEach(checklist => {
+                    Object.entries(checklist.groupedItems).forEach(([groupName, groupData]) => {
+                        if (!selectedItemsByGroup[groupName]) {
+                            selectedItemsByGroup[groupName] = {};
+                        }
+
+                        groupData.items.forEach((item, index) => {
+                            if (item.selected) {
+                                const itemName = item.name;
+
+                                if (!selectedItemsByGroup[groupName][itemName]) {
+                                    selectedItemsByGroup[groupName][itemName] = {
+                                        rooms: []
+                                    };
+                                }
+
+                                selectedItemsByGroup[groupName][itemName].rooms.push(checklist.roomNumber);
+                            }
+                        });
+                    });
+                });
+
+                // Create groups container
+                const groupsContainer = document.createElement('div');
+                groupsContainer.className = 'space-y-4';
+
+                // Sort groups alphabetically
+                const sortedGroups = Object.keys(selectedItemsByGroup).sort();
+
+                sortedGroups.forEach(groupName => {
+                    // Skip empty groups
+                    if (Object.keys(selectedItemsByGroup[groupName]).length === 0) return;
+
+                    const groupDiv = document.createElement('div');
+                    groupDiv.className = 'all-rooms-group border border-gray-200 rounded-lg overflow-hidden';
+
+                    // Create group header
+                    const groupHeader = document.createElement('div');
+                    groupHeader.className = 'all-rooms-group-header flex justify-between items-center p-3 bg-gray-50';
+
+                    const itemCount = Object.keys(selectedItemsByGroup[groupName]).length;
+
+                    groupHeader.innerHTML = `
+                        <div class="flex items-center">
+                            <span class="font-medium text-gray-800 text-sm">${groupName}</span>
+                            <span class="ml-2 text-xs text-gray-500">(${itemCount} items)</span>
+                        </div>
+                    `;
+
+                    // Create items container
+                    const itemsContainer = document.createElement('div');
+                    itemsContainer.className = 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 p-3';
+
+                    // Sort items alphabetically
+                    const sortedItems = Object.keys(selectedItemsByGroup[groupName]).sort();
+
+                    sortedItems.forEach(itemName => {
+                        const itemData = selectedItemsByGroup[groupName][itemName];
+                        const itemCell = document.createElement('div');
+                        const isClicked = clickedItems[itemName] || false;
+                        itemCell.className = `all-rooms-item border rounded-lg p-3 flex flex-col shadow-sm ${isClicked ? 'clicked' : ''}`;
+                        itemCell.dataset.name = itemName;
+
+                        // Sort room numbers
+                        const sortedRooms = [...itemData.rooms].sort((a, b) => a - b);
+
+                        itemCell.innerHTML = `
+                            <div class="flex items-center mb-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                                <span class="font-medium text-gray-700 text-sm ${isClicked ? 'crossed-text' : ''}">${itemName}</span>
+                            </div>
+                            <div class="flex flex-wrap gap-1 mt-1">
+                                ${sortedRooms.map(room => `
+                                    <span class="room-badge text-xs text-white px-2 py-0.5 rounded-full">TH.${room}</span>
+                                `).join('')}
+                            </div>
+                        `;
+
+                        // Add click event to toggle clicked state
+                        itemCell.addEventListener('click', function () {
+                            const itemName = this.dataset.name;
+                            clickedItems[itemName] = !clickedItems[itemName];
+                            this.classList.toggle('clicked', clickedItems[itemName]);
+
+                            // Toggle crossed-text class on the item name
+                            const itemNameSpan = this.querySelector('span.font-medium');
+                            itemNameSpan.classList.toggle('crossed-text', clickedItems[itemName]);
+
+                            saveClickedItems();
+                        });
+
+                        itemsContainer.appendChild(itemCell);
+                    });
+
+                    groupDiv.appendChild(groupHeader);
+                    groupDiv.appendChild(itemsContainer);
+                    groupsContainer.appendChild(groupDiv);
+                });
+
+                contentContainer.appendChild(groupsContainer);
+            }
+
+            // Assemble card
+            card.appendChild(header);
+            card.appendChild(contentContainer);
+            allRoomsContainer.appendChild(card);
+        }
+
+        // Create checklist card
+        function createChecklistCard(checklist) {
+            const card = document.createElement('div');
+            card.className = 'checklist-card bg-white shadow-xl overflow-hidden';
+            card.dataset.id = checklist.id;
+
+            // Calculate selected items count
+            let selectedCount = 0;
+            let totalCount = 0;
+
+            Object.values(checklist.groupedItems).forEach(group => {
+                selectedCount += group.items.filter(item => item.selected).length;
+                totalCount += group.items.length;
+            });
+
+            // Create header
+            const header = document.createElement('div');
+            header.className = 'room-header text-white p-4 flex justify-between items-center';
+            header.innerHTML = `
+                <div>
+                    <h2 class="text-lg font-bold">TH.${checklist.roomNumber}</h2>
+                    <p class="text-blue-100 mt-0.5 text-xs">${selectedCount} items checked</p>
+                </div>
+                <div class="flex items-center">
+                    <select id="room-${checklist.id}" class="room-select mr-3 border border-white border-opacity-30 bg-white bg-opacity-20 text-white rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-white text-sm">
+                        ${roomNumbers.map(room => `
+                            <option value="${room}" ${room === checklist.roomNumber ? 'selected' : ''}>
+                                TH.${room}
+                            </option>
+                        `).join('')}
+                    </select>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white cursor-pointer trash-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                </div>
+            `; //<p class="text-blue-100 mt-0.5 text-xs">${selectedCount} of ${totalCount} items checked</p>
+
+            // Create groups container
+            const groupsContainer = document.createElement('div');
+            groupsContainer.className = 'p-4';
+
+            // Add groups
+            Object.entries(checklist.groupedItems).forEach(([groupName, groupData]) => {
+                const groupDiv = document.createElement('div');
+                groupDiv.className = 'mb-3 border border-gray-200 rounded-lg overflow-hidden';
+
+                // Create group header
+                const groupHeader = document.createElement('div');
+                groupHeader.className = 'group-header flex justify-between items-center p-3 cursor-pointer';
+                groupHeader.innerHTML = `
+                    <div class="flex items-center">
+                        <span class="font-medium text-gray-800 text-sm">${groupName}</span>
+                        <span class="ml-2 text-xs text-gray-500">
+                            (${groupData.items.filter(item => item.selected).length}/${groupData.items.length})
+                        </span>
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500 chevron ${groupData.expanded ? 'open' : ''}" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                `;
+
+                // Create group items
+                const groupItems = document.createElement('div');
+                groupItems.className = `group-items ${groupData.expanded ? 'open' : ''} grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 p-3 bg-gray-50`;
+
+                groupData.items.forEach((item, index) => {
+                    const itemCell = document.createElement('div');
+                    itemCell.className = `item-cell border rounded-md p-2 flex items-center text-sm ${item.selected ? 'selected' : ''}`;
+                    itemCell.dataset.group = groupName;
+                    itemCell.dataset.index = index;
+
+                    itemCell.innerHTML = `
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5 ${item.selected ? 'text-white' : 'text-gray-400'}" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                        </svg>
+                        <span>${item.name}</span>
+                    `;
+
+                    groupItems.appendChild(itemCell);
+                });
+
+                // Add event listener to group header
+                groupHeader.addEventListener('click', function () {
+                    const chevron = this.querySelector('.chevron');
+                    const items = this.nextElementSibling;
+
+                    // Toggle expanded state
+                    chevron.classList.toggle('open');
+                    items.classList.toggle('open');
+
+                    // Update state
+                    checklist.groupedItems[groupName].expanded = items.classList.contains('open');
+
+                    // Save to local storage
+                    saveChecklists();
+                });
+
+                groupDiv.appendChild(groupHeader);
+                groupDiv.appendChild(groupItems);
+                groupsContainer.appendChild(groupDiv);
+            });
+
+            // Add event listeners for item cells
+            card.addEventListener('click', function (e) {
+                // Handle item cell click
+                if (e.target.closest('.item-cell')) {
+                    const itemCell = e.target.closest('.item-cell');
+                    const groupName = itemCell.dataset.group;
+                    const index = parseInt(itemCell.dataset.index);
+
+                    // Toggle selected state
+                    checklist.groupedItems[groupName].items[index].selected = !checklist.groupedItems[groupName].items[index].selected;
+
+                    // Save to local storage
+                    saveChecklists();
+
+                    // Re-render UI
+                    renderUI();
+                }
+            });
+
+            // Handle trash icon click
+            const trashIcon = header.querySelector('.trash-icon');
+            trashIcon.addEventListener('click', function (e) {
+                e.stopPropagation();
+
+                // Remove checklist
+                const index = checklists.findIndex(c => c.id === checklist.id);
+                if (index !== -1) {
+                    checklists.splice(index, 1);
+
+                    // Update active checklist
+                    if (checklists.length > 0) {
+                        activeChecklistId = checklists[0].id;
+                    } else {
+                        activeChecklistId = null;
+                    }
+
+                    // Save to local storage
+                    saveChecklists();
+
+                    // Re-render UI
+                    renderUI();
+                }
+            });
+
+            // Handle room select change
+            const roomSelect = header.querySelector('.room-select');
+            roomSelect.addEventListener('change', function (e) {
+                e.stopPropagation();
+                const newRoomNumber = parseInt(this.value);
+
+                // Check if another checklist already uses this room
+                const existingIndex = checklists.findIndex(c => c.roomNumber === newRoomNumber && c.id !== checklist.id);
+
+                if (existingIndex !== -1) {
+                    alert(`TH.${newRoomNumber} already has a checklist. Please choose a different room.`);
+                    this.value = checklist.roomNumber;
+                    return;
+                }
+
+                // Update room number
+                checklist.roomNumber = newRoomNumber;
+
+                // Save to local storage
+                saveChecklists();
+
+                // Re-render UI
+                renderUI();
+            });
+
+            // Assemble card
+            card.appendChild(header);
+            card.appendChild(groupsContainer);
+
+            return card;
+        }
+
+        // Initialize the application
+        init();
+    </script>
+</body>
+
+</html>
