@@ -96,13 +96,12 @@
     </style>
 </head>
 
-<body class="flex items-center justify-center p-4">
+<body class="static flex items-center justify-center p-4">
     <div class="overlay"></div>
     <div class="form-container w-full max-w-md rounded-xl shadow-lg overflow-hidden">
         <div class="p-8">
             <div class="my-1 mb-3 text-sm font-medium text-gray-800 text-center">誠意邀請你蒞臨</div>
             <h2 class="text-2xl font-bold text-gray-800 text-center">Martin's Piano Concert</h2>
-
 
             <div class="mt-6 mb-4 text-sm font-medium text-gray-800">
 
@@ -110,16 +109,17 @@
                 <div class="pb-1">時間：晚上8點</div>
                 <div class="pb-1">地點：香港大會堂演奏廳</div>
                 <div class="pl-10 pb-1">(香港站A出口/中環站K出口)</div>
-                
+
             </div>
 
-            <div class="mb-8">
-                <img src="https://www.lcsd.gov.hk/common/en/images/Map_EC_202208_B_v12.png">
-                <a href="https://maps.app.goo.gl/jmrGvuTwVHsTJ45t9" class="mt-6 mb-4 text-sm font-medium text-gray-800 text-indigo-700 underline">打開Google Maps地圖</a>
+            <div class="mb-10">
+                <img src="https://www.lcsd.gov.hk/common/en/images/Map_EC_202208_B_v12.png" class="mb-1">
+                <a href="https://maps.app.goo.gl/jmrGvuTwVHsTJ45t9"
+                    class="text-sm font-medium text-gray-800 text-indigo-700 underline">打開Google Maps地圖</a>
             </div>
 
             <form id="form">
-                <div class="space-y-5">
+                <div id="form-content" class="space-y-5">
                     <!-- Name Field -->
                     <div>
                         <label for="name" class="block text-sm font-medium text-gray-700 mb-1">姓名</label>
@@ -163,7 +163,8 @@
     </div>
 
     <script>
-        const form = document.getElementById("form");
+      const form = document.getElementById("form");
+      const formContentDiv = document.getElementById("form-content");
       const submitButton = document.getElementById("submit-button");
       const messageDiv = document.getElementById("message");
 
@@ -201,7 +202,9 @@
 
           if (data.status === "success") {
             messageDiv.textContent = "已經收到您的報名，謝謝您！";
+            formContentDiv.classList.add("hidden");
             messageDiv.classList.remove("hidden");
+
             form.reset();
           } else {
             // throw new Error(data.message || "傳送失敗");
@@ -213,6 +216,7 @@
           messageDiv.textContent = "傳送失敗";
           messageDiv.classList.add("bg-red-50", "border-red-200", "text-red-700");
           messageDiv.classList.remove("hidden");
+          formContentDiv.classList.add("hidden");
 
         } finally {
           submitButton.disabled = false;
@@ -222,6 +226,8 @@
             messageDiv.textContent = "";
             messageDiv.classList.remove("bg-red-50", "border-red-200", "text-red-700");
             messageDiv.classList.add("hidden", "bg-green-50", "border-green-200", "text-green-700");
+            messageDiv.classList.add("bg-green-50", "border-green-200", "text-green-700");
+            formContentDiv.classList.remove("hidden");
           }, 4000);
         }
       });
